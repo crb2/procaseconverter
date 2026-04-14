@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-VMG185W64B"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-VMG185W64B');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+
+    <title>Pro Case Converter | Free Online Text Case Conversion Tool</title>
+    <meta name="description"
+        content="Convert text to Upper Case, Lower Case, Sentence Case, Capitalized Case, and more with Pro Case Converter. A fast, free, and simple online text formatting tool.">
+    <meta name="keywords"
+        content="case converter, text converter, upper case to lower case, sentence case online, convert text case, pro case converter">
+    <meta name="author" content="Pro Case Converter">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [{
+        "@type": "Question",
+        "name": "How to use Pro Case Converter?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Simply paste your text in the workspace, then click on the desired case button (like UPPER CASE or lower case). You can also adjust font size, bold/italic, and download the result as a text file."
+        }
+      }, {
+        "@type": "Question",
+        "name": "What is 'Continue where I left off'?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "This feature uses local storage to save your text and formatting. Even if you refresh the page or close your browser, your work remains safe for next time."
+        }
+      }]
+    }
+    </script>
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://procaseconverter.online/">
+    <meta property="og:title" content="Pro Case Converter | Online Text Formatting Tool">
+    <meta property="og:description"
+        content="Change your text case instantly. Supports Sentence case, lower case, UPPER CASE, and more.">
+    <meta property="og:image" content="android-chrome-512x512.png">
+
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="android-chrome-512x512.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="android-chrome-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    <link rel="shortcut icon" href="favicon-48x48.ico">
+
+    <link rel="manifest" href="site.webmanifest">
+    <meta name="theme-color" content="#0d1117">
+    <link rel="canonical" href="https://procaseconverter.online/">
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="dark-mode">
+
+    <div class="app-container">
+        <div class="ad-placeholder top-banner">
+            <small>ADVERTISEMENT</small>
+            <div class="demo-ad-content">Auto-Responsive Banner</div>
+        </div>
+
+        <header class="main-header">
+            <div class="header-top">
+                <h1><a href="/" style="text-decoration: none; color: inherit;">Pro Case Converter</a></h1>
+
+                <div class="header-settings-group">
+                    <div class="theme-wrapper">
+                        <span class="icon">☀️</span>
+                        <label class="switch">
+                            <input type="checkbox" id="themeCheckbox" onchange="toggleTheme()" checked>
+                            <span class="slider round"></span>
+                        </label>
+                        <span class="icon">🌙</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="header-controls">
+                <div class="toolbar">
+                    <div class="toolbar-left-group">
+                        <div class="font-size-wrapper">
+                            <button class="size-btn" id="minusBtn">−</button>
+                            <div class="size-display-container">
+                                <span id="fontSizeDisplay">16</span>
+                                <input type="number" id="fontSizeInput" min="10" max="100" style="display: none;">
+                            </div>
+                            <button class="size-btn" id="plusBtn">+</button>
+                        </div>
+
+                        <button class="format-btn has-tooltip" id="boldBtn" onclick="toggleBold()">
+                            <strong>B</strong>
+                            <div class="tooltip">
+                                <span class="close-tooltip" onclick="closeTooltip(event, this)">×</span>
+                                <div class="tooltip-title">Bold</div>
+                                <div class="tooltip-keys"><kbd>Ctrl</kbd> + <kbd>B</kbd></div>
+                            </div>
+                        </button>
+
+                        <button class="format-btn has-tooltip" id="italicBtn" onclick="toggleItalic()">
+                            <em>I</em>
+                            <div class="tooltip">
+                                <span class="close-tooltip" onclick="closeTooltip(event, this)">×</span>
+                                <div class="tooltip-title">Italic</div>
+                                <div class="tooltip-keys"><kbd>Ctrl</kbd> + <kbd>I</kbd></div>
+                            </div>
+                        </button>
+
+                        <div class="align-undo-redo-wrapper">
+                            <div class="align-group">
+                                <button class="format-btn" onclick="setTextAlign('left')">Left</button>
+                                <button class="format-btn" onclick="setTextAlign('center')">Center</button>
+                                <button class="format-btn" onclick="setTextAlign('right')">Right</button>
+                            </div>
+
+                            <div class="history-icons-group">
+                                <button class="icon-btn has-tooltip" id="undoBtn">
+                                    <span class="undo-icon">↺</span>
+                                    <div class="tooltip">
+                                        <span class="close-tooltip" onclick="closeTooltip(event, this)">×</span>
+                                        <div class="tooltip-title">Undo</div>
+                                        <div class="tooltip-keys"><kbd>Ctrl</kbd> + <kbd>Z</kbd></div>
+                                    </div>
+                                </button>
+
+                                <button class="icon-btn has-tooltip" id="redoBtn">
+                                    <span class="redo-icon">↻</span>
+                                    <div class="tooltip">
+                                        <span class="close-tooltip" onclick="closeTooltip(event, this)">×</span>
+                                        <div class="tooltip-title">Redo</div>
+                                        <div class="tooltip-keys"><kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>Z</kbd>
+                                        </div>
+                                    </div>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="save-option-toolbar">
+                        <label class="checkbox-container">
+                            <input type="checkbox" id="saveProgress" onchange="toggleSavePreference()">
+                            <span>Continue where I left off</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div class="main-layout-wrapper">
+            <aside class="ad-placeholder sidebar-ad">
+                <small>AD</small>
+                <div class="demo-ad-content">160 x 600<br>Skyscraper</div>
+            </aside>
+
+            <main class="workspace">
+                <div id="textInput" contenteditable="true" oninput="handleInput()" spellcheck="false"
+                    data-placeholder="Type or paste your text here"></div>
+            </main>
+
+            <aside class="ad-placeholder sidebar-ad">
+                <small>AD</small>
+                <div class="demo-ad-content">160 x 600<br>Skyscraper</div>
+            </aside>
+        </div>
+
+        <div class="footer-section">
+            <div class="ad-placeholder bottom-banner">
+                <small>ADVERTISEMENT</small>
+                <div class="demo-ad-content">320 x 50 Mobile / 728 x 90 Desktop</div>
+            </div>
+
+            <div class="stats">
+                <strong>Chars:</strong> <span id="charCount">0</span> |
+                <strong>Words:</strong> <span id="wordCount">0</span> |
+                <strong>Lines:</strong> <span id="lineCount">0</span>
+            </div>
+
+            <div class="button-group">
+                <button class="tool-btn case-btn" onclick="toSentenceCase()">Sentence case</button>
+                <button class="tool-btn case-btn" onclick="toLowerCase()">lower case</button>
+                <button class="tool-btn case-btn" onclick="toUpperCase()">UPPER CASE</button>
+                <button class="tool-btn case-btn" onclick="toCapitalizedCase()">Capitalized Case</button>
+                <button class="tool-btn case-btn" onclick="toInverseCase()">iNVERSE cASE</button>
+                <button class="tool-btn case-btn" onclick="toAlternatingCase()">aLtErNaTiNg cAsE</button>
+            </div>
+
+            <div class="button-group">
+                <button class="tool-btn btn-download" onclick="downloadText()">Download .txt</button>
+                <button class="tool-btn btn-copy" onclick="copyText()">Copy to Clipboard</button>
+                <button class="tool-btn btn-clear" onclick="clearText()">Clear</button>
+            </div>
+
+            <div class="bottom-bar">
+                <section class="seo-content"
+                    style="margin: 15px 0 10px 0; padding: 10px 0; font-size: 14px; color: var(--text-muted); line-height: 1.5; border-top: 1px solid var(--border-color);">
+                    <h2 style="font-size: 16px; color: var(--primary-color); margin-bottom: 8px;">Professional Text Case
+                        Converter Online</h2>
+                    <p>Easily convert your text between different cases: <strong>Sentence case</strong>, <strong>lower
+                            case</strong>, <strong>UPPER CASE</strong>, <strong>Capitalized Case</strong>, and more. Our
+                        tool is designed for students, writers, and developers who need to quickly format their content
+                        without manual editing.</p>
+                </section>
+
+                <section class="faq-section" style="margin-bottom: 20px;">
+                    <h2 style="font-size: 16px; color: var(--primary-color); margin-bottom: 10px;">Frequently Asked Questions (FAQ)</h2>
+                    
+                    <details class="faq-item">
+                        <summary>How do the conversion buttons work?</summary>
+                        <div class="faq-content">
+                            <ul>
+                                <li><strong>Sentence case:</strong> Capitalizes the first letter of sentences.</li>
+                                <li><strong>lower case:</strong> Converts all text to small letters.</li>
+                                <li><strong>UPPER CASE:</strong> Converts all text to CAPITAL letters.</li>
+                                <li><strong>Capitalized Case:</strong> Capitalizes the first letter of every word.</li>
+                                <li><strong>iNVERSE cASE:</strong> Swaps small to caps and vice versa.</li>
+                            </ul>
+                        </div>
+                    </details>
+
+                    <details class="faq-item">
+                        <summary>Is this case converter safe and private?</summary>
+                        <div class="faq-content">
+                            <p>Yes, Pro Case Converter is 100% safe. All conversions happen locally in your browser. We never store or upload your text to any server.</p>
+                        </div>
+                    </details>
+
+                    <details class="faq-item">
+                        <summary>Tips for professional text formatting</summary>
+                        <div class="faq-content">
+                            <p>Use 'Sentence case' for emails and blog posts to maintain readability. Use 'Capitalized Case' for headlines or titles. Use the 'Download' button to quickly save your formatted text without copying.</p>
+                        </div>
+                    </details>
+                </section>
+
+                <footer class="site-footer">
+                    <div class="footer-links" style="margin-bottom: 10px;">
+                        <a href="/about-us/"
+                            style="color: var(--text-muted); margin: 0 10px; text-decoration: none; font-size: 12px;">About
+                            Us</a> |
+                        <a href="/privacy-policy/"
+                            style="color: var(--text-muted); margin: 0 10px; text-decoration: none; font-size: 12px;">Privacy
+                            Policy</a> |
+                        <a href="/terms-and-conditions/"
+                            style="color: var(--text-muted); margin: 0 10px; text-decoration: none; font-size: 12px;">Terms
+                            & Conditions</a>
+                    </div>
+                    &copy; 2026 Pro Case Converter.
+                </footer>
+            </div>
+        </div>
+
+        <div id="copyToast" class="toast">✔ Copied to clipboard!</div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
