@@ -4,10 +4,12 @@
 <head>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-VMG185W64B"></script>
     <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag() { dataLayer.push(arguments); }
-        gtag('js', new Date());
-        gtag('config', 'G-VMG185W64B');
+        window.addEventListener('load', function () {
+            window.dataLayer = window.dataLayer || [];
+            function gtag() { dataLayer.push(arguments); }
+            gtag('js', new Date());
+            gtag('config', 'G-VMG185W64B');
+        });
     </script>
 
     <script type="application/ld+json">
@@ -273,7 +275,8 @@
                         <div class="faq-content">
                             <p>Simply paste the text into our workspace and click <strong>iNVERSE cASE</strong> or
                                 <strong>Sentence case</strong>. The tool will instantly flip the capitalization to the
-                                correct format, saving you from retyping the entire document.</p>
+                                correct format, saving you from retyping the entire document.
+                            </p>
                         </div>
                     </details>
 
