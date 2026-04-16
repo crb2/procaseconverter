@@ -2,7 +2,6 @@
 <html lang="en">
 
 <head>
-    <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-VMG185W64B"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
@@ -13,7 +12,7 @@
     </script>
 
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Pro Case Converter | Free Online Text Case Conversion Tool</title>
     <meta name="description"
@@ -81,7 +80,7 @@
                     <div class="theme-wrapper">
                         <span class="icon">☀️</span>
                         <label class="switch">
-                            <input type="checkbox" id="themeCheckbox" onchange="toggleTheme()" checked>
+                            <input type="checkbox" id="themeCheckbox" onchange="toggleTheme()" aria-label="Toggle Dark and Light Mode" checked>
                             <span class="slider round"></span>
                         </label>
                         <span class="icon">🌙</span>
@@ -205,17 +204,13 @@
 
             <div class="bottom-bar">
                 <section class="seo-content"
-                    style="margin: 15px 0 10px 0; padding: 10px 0; font-size: 14px; color: var(--text-muted); line-height: 1.5; border-top: 1px solid var(--border-color);">
-                    <h2 style="font-size: 16px; color: var(--primary-color); margin-bottom: 8px;">Professional Text Case
-                        Converter Online</h2>
-                    <p>Easily convert your text between different cases: <strong>Sentence case</strong>, <strong>lower
-                            case</strong>, <strong>UPPER CASE</strong>, <strong>Capitalized Case</strong>, and more. Our
-                        tool is designed for students, writers, and developers who need to quickly format their content
-                        without manual editing.</p>
+                    style="margin: 10px 0 5px 0; padding: 5px 0; font-size: 14px; color: var(--text-muted); line-height: 1.5; border-top: 1px solid var(--border-color);">
+                    <h2 style="font-size: 16px; color: var(--primary-color); margin-bottom: 5px;">Professional Text Case Converter Online</h2>
+                    <p style="margin: 0;">Easily convert your text between different cases: <strong>Sentence case</strong>, <strong>lower case</strong>, <strong>UPPER CASE</strong>, <strong>Capitalized Case</strong>, and more. Our tool is designed for students, writers, and developers who need to quickly format their content without manual editing.</p>
                 </section>
 
-                <section class="faq-section" style="margin-bottom: 20px;">
-                    <h2 style="font-size: 16px; color: var(--primary-color); margin-bottom: 10px;">Frequently Asked Questions (FAQ)</h2>
+                <section class="faq-section" style="margin-top: 5px; margin-bottom: 20px;">
+                    <h2 style="font-size: 16px; color: var(--primary-color); margin-bottom: 8px;">Frequently Asked Questions (FAQ)</h2>
                     
                     <details class="faq-item">
                         <summary>How do the conversion buttons work?</summary>
@@ -265,7 +260,7 @@
         <div id="copyToast" class="toast">✔ Copied to clipboard!</div>
     </div>
 
-    <script src="script.js"></script>
+    <script src="script.js" defer></script>
 </body>
 
 </html>

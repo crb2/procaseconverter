@@ -184,10 +184,20 @@ function saveState() {
 
 function applyTransformation(action) {
     saveState();
-    // Strip trailing newline added by contenteditable to prevent extra spaces
     let text = textArea.innerText.replace(/\n$/, "");
-    textArea.innerText = action(text);
-    updateStats();
+    let placeholder = textArea.getAttribute('data-placeholder');
+
+    // 1. Update the placeholder attribute so the "hint" transforms
+    if (placeholder) {
+        textArea.setAttribute('data-placeholder', action(placeholder));
+    }
+
+    // 2. Only update the actual workspace content if it's not empty
+    if (text && text.trim() !== "") {
+        textArea.innerText = action(text);
+        updateStats();
+    }
+    
     autoSave();
 }
 
