@@ -14,19 +14,44 @@
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+    <meta name="googlebot" content="index, follow">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="application-name" content="Pro Case Converter">
+    <meta name="apple-mobile-web-app-title" content="Pro Case Converter">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
     <meta name="description"
-        content="Convert text to Upper Case, Lower Case, Sentence Case, Capitalized Case, and more with Pro Case Converter. A fast, free, and simple online text formatting tool.">
+        content="Free online case converter to change text to Sentence case, lower case, UPPER CASE, Capitalized Case, inverse case, and alternating case instantly.">
     <meta name="keywords"
-        content="case converter, text converter, upper case to lower case, sentence case online, convert text case, pro case converter">
+        content="case converter, text case converter, uppercase converter, lowercase converter, sentence case converter, capitalized case converter, inverse case, alternating case">
     <meta name="author" content="Pro Case Converter">
+    <meta name="publisher" content="Pro Case Converter">
+    <meta name="language" content="English">
+    <meta name="rating" content="General">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
 
     <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Pro Case Converter">
+    <meta property="og:locale" content="en_US">
     <meta property="og:url" content="https://procaseconverter.online/">
-    <meta property="og:title" content="Pro Case Converter | Online Text Formatting Tool">
+    <meta property="og:title" content="Pro Case Converter | Free Online Text Case Converter">
     <meta property="og:description"
-        content="Change your text case instantly. Supports Sentence case, lower case, UPPER CASE, and more.">
-    <meta property="og:image" content="android-chrome-512x512.png">
+        content="Convert text to Sentence case, lower case, UPPER CASE, Capitalized Case, inverse case, and alternating case instantly in your browser.">
+    <meta property="og:image" content="https://procaseconverter.online/android-chrome-512x512.png">
+    <meta property="og:image:secure_url" content="https://procaseconverter.online/android-chrome-512x512.png">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="512">
+    <meta property="og:image:height" content="512">
+    <meta property="og:image:alt" content="Pro Case Converter logo">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Pro Case Converter | Free Online Text Case Converter">
+    <meta name="twitter:description"
+        content="Change text case instantly with a free browser-based converter for uppercase, lowercase, sentence case, capitalized case, and more.">
+    <meta name="twitter:image" content="https://procaseconverter.online/android-chrome-512x512.png">
+    <meta name="twitter:image:alt" content="Pro Case Converter logo">
 
     <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon-180x180.png">
     <link rel="icon" type="image/png" sizes="512x512" href="android-chrome-512x512.png">
@@ -40,28 +65,87 @@
     <link rel="canonical" href="https://procaseconverter.online/">
 
     <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "FAQPage",
-      "mainEntity": [{
-        "@type": "Question",
-        "name": "How to use Pro Case Converter?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Simply paste your text in the workspace, then click on the desired case button (like UPPER CASE or lower case). You can also adjust font size, bold/italic, and download the result as a text file."
+    [
+        {
+            "@context": "https://schema.org",
+            "@type": "WebApplication",
+            "name": "Pro Case Converter",
+            "alternateName": "Free Text Case Converter",
+            "url": "https://procaseconverter.online/",
+            "applicationCategory": "UtilitiesApplication",
+            "operatingSystem": "Any",
+            "browserRequirements": "Requires JavaScript",
+            "description": "Free online text case converter for Sentence case, lower case, UPPER CASE, Capitalized Case, inverse case, and alternating case.",
+            "image": "https://procaseconverter.online/android-chrome-512x512.png",
+            "offers": {
+                "@type": "Offer",
+                "price": "0",
+                "priceCurrency": "USD"
+            },
+            "featureList": [
+                "Convert text to Sentence case",
+                "Convert text to lower case",
+                "Convert text to UPPER CASE",
+                "Convert text to Capitalized Case",
+                "Convert text to inverse case",
+                "Convert text to alternating case",
+                "Copy converted text to clipboard",
+                "Download converted text as a .txt file"
+            ]
+        },
+        {
+            "@context": "https://schema.org",
+            "@type": "WebSite",
+            "name": "Pro Case Converter",
+            "url": "https://procaseconverter.online/",
+            "description": "A free online text case converter for fast browser-based text formatting.",
+            "inLanguage": "en-US",
+            "publisher": {
+                "@type": "Organization",
+                "name": "Pro Case Converter",
+                "url": "https://procaseconverter.online/",
+                "logo": {
+                    "@type": "ImageObject",
+                    "url": "https://procaseconverter.online/android-chrome-512x512.png",
+                    "width": 512,
+                    "height": 512
+                }
+            }
+        },
+        {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+                {
+                    "@type": "Question",
+                    "name": "How do I use Pro Case Converter?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Paste or type your text in the editor, then choose a conversion option such as Sentence case, lower case, UPPER CASE, Capitalized Case, inverse case, or alternating case."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "Is Pro Case Converter private?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Yes. Text conversion happens locally in your browser, so your text is not uploaded to a server."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "Can I download the converted text?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Yes. After converting your text, use the Download .txt button to save the result as a text file."
+                    }
+                }
+            ]
         }
-      }, {
-        "@type": "Question",
-        "name": "What is 'Continue where I left off'?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "This feature uses local storage to save your text and formatting. Even if you refresh the page or close your browser, your work remains safe for next time."
-        }
-      }]
-    }
+    ]
     </script>
 
-    <title>Pro Case Converter | Free Online Text Case Conversion Tool</title>
+    <title>Pro Case Converter | Free Online Text Case Converter</title>
 
     <link rel="stylesheet" href="style.css">
 </head>
