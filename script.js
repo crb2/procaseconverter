@@ -18,6 +18,8 @@ let redoStack = [];
 let currentFontSize = 16;
 let holdTimer;
 let historyTimer;
+let lastHistoryState = '';
+let isRestoringHistory = false;
 
 // --- 1. INITIALIZATION ---
 window.addEventListener('load', () => {
@@ -54,11 +56,17 @@ window.addEventListener('load', () => {
         document.body.classList.add('dark-mode');
         textArea.style.color = "#ffffff";
     }
+
+    lastHistoryState = textArea.innerHTML;
 });
 
 // --- 2. INPUT & CLEAN PASTE ---
 function handleInput() {
     if (textArea.innerText === "\n") { textArea.innerHTML = ""; }
+    if (!isRestoringHistory && textArea.innerHTML !== lastHistoryState) {
+        saveState(lastHistoryState);
+        lastHistoryState = textArea.innerHTML;
+    }
     updateStats(); 
     autoSave(); 
 }
@@ -173,9 +181,9 @@ function updateStats() {
     lineCount.innerText = (text === "" || text === "\n") ? 0 : text.split(/\r|\r\n|\n/).length;
 }
 
-function saveState() {
-    if (historyStack.length === 0 || historyStack[historyStack.length - 1] !== textArea.innerHTML) {
-        historyStack.push(textArea.innerHTML);
+function saveState(state = textArea.innerHTML) {
+    if (historyStack.length === 0 || historyStack[historyStack.length - 1] !== state) {
+        historyStack.push(state);
         if (historyStack.length > 50) historyStack.shift(); 
         redoStack = []; 
         autoSave();
@@ -187,6 +195,7 @@ function applyTransformation(action) {
     // Strip trailing newline added by contenteditable to prevent extra spaces
     let text = textArea.innerText.replace(/\n$/, "");
     textArea.innerText = action(text);
+    lastHistoryState = textArea.innerHTML;
     updateStats();
     autoSave();
 }
@@ -206,8 +215,8 @@ function toInverseCase() { applyTransformation(t => t.split('').map(c => c === c
 function toAlternatingCase() { applyTransformation(t => { let chars = t.toLowerCase().split(''); for (let i = 0; i < chars.length; i++) if (i % 2 !== 0) chars[i] = chars[i].toUpperCase(); return chars.join(''); }); }
 
 // --- 7. HISTORY ACTIONS ---
-function undo() { if (historyStack.length > 0) { redoStack.push(textArea.innerHTML); textArea.innerHTML = historyStack.pop(); updateStats(); autoSave(); } }
-function redo() { if (redoStack.length > 0) { historyStack.push(textArea.innerHTML); textArea.innerHTML = redoStack.pop(); updateStats(); autoSave(); } }
+function undo() { if (historyStack.length > 0) { isRestoringHistory = true; redoStack.push(textArea.innerHTML); textArea.innerHTML = historyStack.pop(); lastHistoryState = textArea.innerHTML; updateStats(); autoSave(); isRestoringHistory = false; } }
+function redo() { if (redoStack.length > 0) { isRestoringHistory = true; historyStack.push(textArea.innerHTML); textArea.innerHTML = redoStack.pop(); lastHistoryState = textArea.innerHTML; updateStats(); autoSave(); isRestoringHistory = false; } }
 
 function startHistoryHold(action) { action(); historyTimer = setTimeout(() => { historyTimer = setInterval(action, 200); }, 500); }
 function stopHistoryHold() { clearTimeout(historyTimer); clearInterval(historyTimer); }
@@ -217,13 +226,13 @@ redoBtn.addEventListener('mousedown', () => startHistoryHold(redo));
 window.addEventListener('mouseup', stopHistoryHold);
 
 window.addEventListener('keydown', (e) => {
-    if (e.ctrlKey && e.key === 'z' && !e.shiftKey) { e.preventDefault(); undo(); }
-    if (e.ctrlKey && e.key === 'Z' && e.shiftKey) { e.preventDefault(); redo(); }
+    if (e.ctrlKey && e.key.toLowerCase() === 'z' && !e.shiftKey) { e.preventDefault(); undo(); }
+    if (e.ctrlKey && e.key.toLowerCase() === 'z' && e.shiftKey) { e.preventDefault(); redo(); }
     if (e.ctrlKey && e.key === 'b') { e.preventDefault(); toggleBold(); }
     if (e.ctrlKey && e.key === 'i') { e.preventDefault(); toggleItalic(); }
 });
 
-function clearText() { saveState(); textArea.innerHTML = ''; updateStats(); localStorage.removeItem('caseConverterTextHTML'); }
+function clearText() { saveState(); textArea.innerHTML = ''; lastHistoryState = textArea.innerHTML; updateStats(); localStorage.removeItem('caseConverterTextHTML'); }
 
 function downloadText() {
     const blob = new Blob([textArea.innerText], { type: 'text/plain' });
