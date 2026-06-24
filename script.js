@@ -23,11 +23,11 @@ let historyTimer;
 window.addEventListener('load', () => {
     const shouldSave = localStorage.getItem('allowAutoSave') === 'true';
     saveCheckbox.checked = shouldSave;
-
+    
     if (shouldSave) {
         const savedText = localStorage.getItem('caseConverterTextHTML');
         if (savedText) { textArea.innerHTML = savedText; updateStats(); }
-
+        
         const savedHistory = localStorage.getItem('caseConverterHistory');
         const savedRedo = localStorage.getItem('caseConverterRedo');
         if (savedHistory) historyStack = JSON.parse(savedHistory);
@@ -35,7 +35,7 @@ window.addEventListener('load', () => {
 
         if (localStorage.getItem('textareaWeight') === 'bold') { textArea.style.fontWeight = 'bold'; boldBtn.classList.add('active'); }
         if (localStorage.getItem('textareaItalic') === 'italic') { textArea.style.fontStyle = 'italic'; italicBtn.classList.add('active'); }
-
+        
         const savedAlign = localStorage.getItem('textareaAlign');
         if (savedAlign) textArea.style.textAlign = savedAlign;
     }
@@ -43,9 +43,9 @@ window.addEventListener('load', () => {
     const savedFontSize = localStorage.getItem('textareaFontSize');
     currentFontSize = savedFontSize ? parseInt(savedFontSize) : 16;
     applyFontSize();
-
+    
     const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'light') {
+    if(savedTheme === 'light') {
         themeCheckbox.checked = false;
         document.body.classList.remove('dark-mode');
         textArea.style.color = "#000000";
@@ -59,8 +59,8 @@ window.addEventListener('load', () => {
 // --- 2. INPUT & CLEAN PASTE ---
 function handleInput() {
     if (textArea.innerText === "\n") { textArea.innerHTML = ""; }
-    updateStats();
-    autoSave();
+    updateStats(); 
+    autoSave(); 
 }
 
 textArea.addEventListener('paste', (e) => {
@@ -135,7 +135,7 @@ plusBtn.addEventListener('touchstart', (e) => { e.preventDefault(); startHold(5)
 window.addEventListener('touchend', stopHold);
 
 // --- 5. PERSISTENCE & UI ---
-function autoSave() {
+function autoSave() { 
     if (saveCheckbox.checked) {
         localStorage.setItem('caseConverterTextHTML', textArea.innerHTML);
         localStorage.setItem('caseConverterHistory', JSON.stringify(historyStack));
@@ -176,40 +176,30 @@ function updateStats() {
 function saveState() {
     if (historyStack.length === 0 || historyStack[historyStack.length - 1] !== textArea.innerHTML) {
         historyStack.push(textArea.innerHTML);
-        if (historyStack.length > 50) historyStack.shift();
-        redoStack = [];
+        if (historyStack.length > 50) historyStack.shift(); 
+        redoStack = []; 
         autoSave();
     }
 }
 
 function applyTransformation(action) {
     saveState();
+    // Strip trailing newline added by contenteditable to prevent extra spaces
     let text = textArea.innerText.replace(/\n$/, "");
-    let placeholder = textArea.getAttribute('data-placeholder');
-
-    // 1. Update the placeholder attribute so the "hint" transforms
-    if (placeholder) {
-        textArea.setAttribute('data-placeholder', action(placeholder));
-    }
-
-    // 2. Only update the actual workspace content if it's not empty
-    if (text && text.trim() !== "") {
-        textArea.innerText = action(text);
-        updateStats();
-    }
-
+    textArea.innerText = action(text);
+    updateStats();
     autoSave();
 }
 
 function toUpperCase() { applyTransformation(t => t.toUpperCase()); }
 function toLowerCase() { applyTransformation(t => t.toLowerCase()); }
 
-function toSentenceCase() {
-    applyTransformation(t => t.toLowerCase().replace(/(^\s*\w|[.!?]\s+\w)/g, s => s.toUpperCase()));
+function toSentenceCase() { 
+    applyTransformation(t => t.toLowerCase().replace(/(^\s*\w|[.!?]\s+\w)/g, s => s.toUpperCase())); 
 }
 
-function toCapitalizedCase() {
-    applyTransformation(t => t.toLowerCase().replace(/\b\w/g, s => s.toUpperCase()));
+function toCapitalizedCase() { 
+    applyTransformation(t => t.toLowerCase().replace(/\b\w/g, s => s.toUpperCase())); 
 }
 
 function toInverseCase() { applyTransformation(t => t.split('').map(c => c === c.toUpperCase() ? c.toLowerCase() : c.toUpperCase()).join('')); }

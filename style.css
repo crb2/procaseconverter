@@ -1,282 +1,660 @@
-/* --- Global Rules --- */
-* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+/* --- Global Reset --- */
+* {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
 
+/* --- Light Theme Variables --- */
 :root {
-    --bg-body: #f4f7f6; 
-    --bg-card: #ffffff; 
-    --text-main: #000000; 
-    --text-muted: #666666; 
-    --primary-color: #007bff; 
+    --bg-body: #f4f7f6;
+    --bg-card: #ffffff;
+    --text-main: #000000;
+    --text-muted: #666666;
+    --primary-color: #007bff;
     --border-color: #dddddd;
     --tooltip-bg: #1c1f23;
-    --ad-bg: #e9ecef;
-    color-scheme: light; /* Forces browser elements to light mode */
 }
 
+/* --- Dark Theme Variables --- */
 body.dark-mode {
-    --bg-body: #0d1117; 
-    --bg-card: #161b22; 
-    --text-main: #ffffff; 
-    --text-muted: #8b949e; 
-    --primary-color: #58a6ff; 
+    --bg-body: #0d1117;
+    --bg-card: #161b22;
+    --text-main: #ffffff;
+    --text-muted: #8b949e;
+    --primary-color: #58a6ff;
     --border-color: #30363d;
-    --ad-bg: #21262d;
-    color-scheme: dark; /* This removes the "white" from the resize handle and other native elements */
 }
 
-body, html { 
-    height: auto; 
+/* --- Page Base --- */
+body,
+html {
     min-height: 100%;
-    margin: 0; 
-    overflow-x: hidden; 
-    font-family: 'Segoe UI', sans-serif; 
-    background-color: var(--bg-body); 
-    color: var(--text-main); 
+    margin: 0;
+    overflow-x: hidden;
+    font-family: 'Segoe UI', sans-serif;
+    background-color: var(--bg-body);
+    color: var(--text-main);
     transition: background-color 0.3s, color 0.1s;
 }
 
-/* Fix for Scrollbar Collision: Use width: 100% and increased right padding */
-.app-container { 
-    display: flex; 
-    flex-direction: column; 
-    min-height: 100vh; 
-    width: 100%; 
-    padding: 10px 10px 10px 10px; 
-}
-
-/* --- Demo Ads Styling --- */
-.ad-placeholder {
-    background-color: var(--ad-bg);
-    border: 1px dashed var(--border-color);
-    color: var(--text-muted);
+/* --- App Container --- */
+.app-container {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    border-radius: 8px;
-    margin: 5px 0;
-    overflow: hidden;
+    min-height: 100vh;
+    width: 100%;
+    padding: 10px clamp(6px, 2vw, 16px);
 }
 
-.ad-placeholder small { font-size: 9px; margin-bottom: 4px; opacity: 0.6; color: var(--text-main); font-weight: 600; letter-spacing: 0.5px; opacity: 0.9; }
-.demo-ad-content { font-weight: bold; font-size: 12px; }
-
-.top-banner { min-height: 90px; width: 100%; margin-bottom: 10px; flex-shrink: 0; }
-.bottom-banner { min-height: 60px; width: 100%; margin: 20px 0; flex-shrink: 0; }
-.sidebar-ad { width: 160px; min-height: 100%; margin: 0 10px; flex-shrink: 0; }
-
-/* Main Layout for Workspace + Sidebars */
-.main-layout-wrapper {
+/* --- Editor Layout --- */
+.editor-layout {
     display: flex;
     flex-grow: 1;
     margin: 10px 0;
-    height: auto; 
-    min-height: 450px;
 }
 
-/* --- Header & Toolbar --- */
-.main-header { display: flex; flex-direction: column; padding-bottom: 10px; border-bottom: 1px solid var(--border-color); }
-.header-top { display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 8px; }
+/* --- Header --- */
+.main-header {
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border-color);
+}
 
-/* Theme Switch: Added more space from edge */
-.header-settings-group { display: flex; align-items: center; gap: 8px; margin-right: 10px; }
+/* --- Header Top Row --- */
+.header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin: 15px 4px;
+}
 
-h1 { margin: 0; color: var(--primary-color); font-size: 20px; }
-.header-controls { display: flex; align-items: center; width: 100%; }
+/* --- Theme Toggle Position --- */
+.theme-toggle-area {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0px 10px 0 0px;
+}
 
-.toolbar { display: flex; align-items: center; justify-content: space-between; width: 100%; gap: 10px; flex-wrap: wrap; padding-right: 0px; }
-.toolbar-left-group { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+/* --- Theme Toggle Controls --- */
+.theme-toggle {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
 
-.format-btn { background: var(--bg-card); border: 1px solid var(--border-color); color: var(--text-main); border-radius: 8px; padding: 6px 12px; cursor: pointer; font-size: 14px; }
-.format-btn:hover { background: var(--border-color); }
-.format-btn.active { background: var(--primary-color); color: #fff; border-color: var(--primary-color); }
+/* --- Toggle Switch --- */
+.switch {
+    position: relative;
+    width: 40px;
+    height: 20px;
+    display: inline-block;
+}
 
-.align-undo-redo-wrapper { display: flex; align-items: center; gap: 10px; }
-.align-group { display: flex; border: 1px solid var(--border-color); border-radius: 8px; overflow: hidden; }
-.align-group .format-btn { border: none; border-right: 1px solid var(--border-color); border-radius: 0; }
-.align-group .format-btn:last-child { border-right: none; }
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
 
-.history-icons-group { display: flex; align-items: center; gap: 8px; }
-.icon-btn { background: none; border: none; color: var(--text-main); font-size: 22px; cursor: pointer; padding: 2px 8px; opacity: 0.8; transition: 0.2s; }
-.icon-btn:hover { opacity: 1; transform: scale(1.1); }
-.undo-icon, .redo-icon { display: inline-block; font-weight: bold; }
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #555;
+    transition: .4s;
+    border-radius: 34px;
+}
 
-.font-size-wrapper { display: flex; align-items: center; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 50px; padding: 2px 12px; gap: 10px; }
-#fontSizeDisplay { cursor: pointer; font-weight: 600; user-select: none; width: 30px; text-align: center; }
-.size-btn { background: none; border: none; color: var(--text-main); font-size: 20px; cursor: pointer; }
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 14px;
+    width: 14px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
 
-/* Save Option: More space from scroller */
-.save-option-toolbar { font-size: 12px; color: var(--text-muted); display: flex; align-items: center; margin-left: auto; padding-right: 15px; }
-.checkbox-container { display: flex; align-items: center; gap: 6px; cursor: default; user-select: none; }
-.checkbox-container input { cursor: pointer; width: 16px; height: 16px; }
+input:checked+.slider {
+    background-color: var(--primary-color);
+}
 
-.theme-wrapper { display: flex; align-items: center; gap: 5px; }
-.switch { position: relative; width: 40px; height: 20px; display: inline-block; }
-.switch input { opacity: 0; width: 0; height: 0; }
-.slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #555; transition: .4s; border-radius: 34px; }
-.slider:before { position: absolute; content: ""; height: 14px; width: 14px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
-input:checked + .slider { background-color: var(--primary-color); }
-input:checked + .slider:before { transform: translateX(20px); }
+input:checked+.slider:before {
+    transform: translateX(20px);
+}
 
-/* --- Workspace --- */
-.workspace { flex-grow: 1; display: flex; position: relative; height: auto; }
+/* --- Page Title --- */
+h1 {
+    margin: 0;
+    color: var(--primary-color);
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+/* --- Toolbar Container --- */
+.header-controls {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+/* --- Toolbar Layout --- */
+.toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+/* --- Text Format Controls --- */
+.text-format-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+/* --- Format Buttons --- */
+.format-btn {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    color: var(--text-main);
+    border-radius: 8px;
+    padding: 10px 12px;
+    cursor: pointer;
+    font-size: 15px;
+}
+
+.format-btn:hover {
+    background: var(--border-color);
+}
+
+.format-btn.active {
+    background: var(--primary-color);
+    color: #fff;
+    border-color: var(--primary-color);
+}
+
+/* --- Alignment And Undo Redo Group --- */
+.align-history-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* --- Alignment Buttons --- */
+.align-group {
+    display: flex;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.align-group .format-btn {
+    border: none;
+    border-right: 1px solid var(--border-color);
+    border-radius: 0;
+}
+
+.align-group .format-btn:last-child {
+    border-right: none;
+}
+
+/* --- Undo Redo Buttons Group --- */
+.history-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* --- Icon Buttons --- */
+.icon-btn {
+    background: none;
+    border: none;
+    color: var(--text-main);
+    font-size: 28px;
+    cursor: pointer;
+    padding: 2px 5px;
+    opacity: 0.8;
+    transition: 0.2s;
+}
+
+.icon-btn:hover {
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+.undo-icon,
+.redo-icon {
+    display: inline-block;
+    font-weight: bold;
+}
+
+/* --- Font Size Controls --- */
+.font-size-wrapper {
+    display: flex;
+    align-items: center;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 5px 12px;
+    gap: 10px;
+
+}
+
+#fontSizeDisplay {
+    cursor: pointer;
+    font-weight: 600;
+    user-select: none;
+    width: 30px;
+    text-align: center;
+    font-size: 17px;
+}
+
+.size-btn {
+    background: none;
+    border: none;
+    color: var(--text-main);
+    font-size: 23px;
+    cursor: pointer;
+}
+
+
+/* --- Autosave Toolbar Option --- */
+.autosave-option {
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+    padding-right: 15px;
+
+}
+
+/* --- Autosave Checkbox --- */
+.checkbox-container {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: default;
+    user-select: none;
+}
+
+.checkbox-container input {
+    cursor: pointer;
+    width: 16px;
+    height: 16px;
+}
+
+
+/* --- Editor Workspace --- */
+.workspace {
+    flex-grow: 1;
+    display: flex;
+    position: relative;
+    min-width: 0;
+}
 
 #textInput {
-    flex-grow: 1; min-height: 350px; height: 620px; padding: 20px; background-color: var(--bg-card);
-    color: var(--text-main) !important; 
-    border: 1px solid var(--border-color); border-radius: 8px;
-    outline: none; overflow-y: auto; 
-    white-space: pre-wrap; 
+    flex-grow: 1;
+    min-height: 350px;
+    height: clamp(300px, 58vh, 620px);
+    width: 100%;
+    padding: 20px;
+    background-color: var(--bg-card);
+    color: var(--text-main) !important;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    outline: none;
+    overflow-y: auto;
+    white-space: pre-wrap;
     word-break: break-word;
     font-family: 'ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', monospace;
-    font-size: 16px; line-height: 1.6;
-    resize: vertical; 
+    font-size: 16px;
+    line-height: 1.6;
+    resize: vertical;
 }
 
-/* Optimized THICK Scrollbar for the Text Area */
-#textInput::-webkit-scrollbar { width: 20px; }
-#textInput::-webkit-scrollbar-track { background: var(--bg-card); border-radius: 8px; }
-#textInput::-webkit-scrollbar-thumb { 
-    background-color: #484f58; 
-    border-radius: 10px; 
-    border: 4px solid var(--bg-card); /* Increased border to center the thick thumb */
-    cursor: pointer !important; 
+#textInput::-webkit-scrollbar {
+    width: 15px;
 }
-#textInput::-webkit-scrollbar-thumb:hover { background-color: var(--primary-color); }
 
-/* Placeholder for contenteditable div */
+#textInput::-webkit-scrollbar-thumb {
+    background-color: #484f58;
+    border-radius: 10px;
+    border: 3px solid var(--bg-card);
+    cursor: pointer !important;
+}
+
+#textInput::-webkit-scrollbar-thumb:hover {
+    background-color: var(--text-muted);
+}
+
 #textInput:empty:before {
     content: attr(data-placeholder);
     color: var(--text-muted);
     opacity: 0.6;
-    pointer-events: none;  
-    display: block; 
+    pointer-events: none;
+    display: block;
 }
 
-/* --- Tooltips --- */
-.has-tooltip { position: relative; }
+/* --- Bold Tooltips --- */
+.has-tooltip {
+    position: relative;
+}
+
 .tooltip {
-    visibility: hidden; opacity: 0; position: absolute; 
-    bottom: 125%; left: 50%; 
-    transform: translateX(-50%); background-color: var(--tooltip-bg); color: #fff;
-    padding: 12px 16px; border-radius: 10px; font-size: 13px; white-space: nowrap;
-    z-index: 1000; box-shadow: 0 4px 15px rgba(0,0,0,0.5); transition: 0.2s; transition-delay: 0.8s;
+    visibility: hidden;
+    opacity: 0;
+    position: absolute;
+    bottom: 125%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--tooltip-bg);
+    color: #fff;
+    padding: 10px 12px;
+    border-radius: 10px;
+    font-size: 13px;
+    white-space: nowrap;
+    z-index: 1000;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    transition: 0.2s;
+    transition-delay: 0.8s;
 }
-.tooltip::after { 
-    content: ""; position: absolute; top: 100%; left: 50%; 
-    margin-left: -6px; border: 6px solid transparent; border-top-color: var(--tooltip-bg); 
+
+.tooltip::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -6px;
+    border: 6px solid transparent;
+    border-top-color: var(--tooltip-bg);
 }
-.close-tooltip { position: absolute; top: 2px; right: 6px; cursor: pointer; color: #8b949e; }
-.has-tooltip:hover .tooltip { visibility: visible; opacity: 1; }
-kbd { background: #333; padding: 2px 4px; border-radius: 4px; border: 1px solid #444; font-size: 11px; }
 
-/* --- Footer & Buttons --- */
-.footer-section { flex-shrink: 0; }
-.stats { margin-bottom: 10px; font-size: 13px; color: var(--text-muted); }
-.button-group { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
+.close-tooltip {
+    position: absolute;
+    top: 2px;
+    right: 6px;
+    cursor: pointer;
+    color: #8b949e;
+}
 
-.tool-btn { 
-    padding: 10px 15px; 
-    border: none; 
-    border-radius: 6px; 
-    background-color: var(--primary-color); 
-    color: #fff; 
-    cursor: pointer; 
-    font-weight: 600; 
-    font-size: 13px; 
-    flex: 1; 
-    min-width: 120px; 
+.has-tooltip:hover .tooltip {
+    visibility: visible;
+    opacity: 1;
+}
+
+kbd {
+    background: #333;
+    padding: 2px 4px;
+    border-radius: 4px;
+    border: 1px solid #444;
+    font-size: 11px;
+}
+
+/* --- Actions Area --- */
+.actions-section {
+    flex-shrink: 0;
+}
+
+/* --- Chars: 0 | Words: 0 | Lines: 0 --- */
+.stats {
+    margin-bottom: 10px;
+    font-size: 15px;
+    color: var(--text-muted);
+}
+
+/* --- Button Groups --- */
+.button-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+/* --- Tool Buttons --- */
+.tool-btn {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 8px;
+    background-color: var(--primary-color);
+    color: #fff;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 16px;
+    flex: 1;
+    min-width: 120px;
+    min-height: 44px;
     transition: padding 0.2s;
 }
 
-/* Double height for blue buttons in Window mode */
 .tool-btn.case-btn {
-    padding: 16px 15px; 
+    padding: 15px 10px;
 }
 
-.btn-download { background-color: #f39c12 !important; padding: 10px 15px !important; }
-.btn-copy { background-color: #28a745 !important; padding: 10px 15px !important; }
-.btn-clear { background-color: #dc3545 !important; padding: 10px 15px !important; }
-
-.bottom-bar { display: flex; flex-direction: column; border-top: 1px solid var(--border-color); padding-top: 10px; }
-.site-footer { font-size: 11px; color: var(--text-muted); padding: 15px 0; text-align: center; width: 100%; }
-
-.toast { visibility: hidden; background: #28a745; color: #fff; padding: 12px; border-radius: 8px; position: fixed; left: 50%; bottom: 80px; transform: translateX(-50%); transition: 0.3s; z-index: 10000; }
-.toast.show { visibility: visible; bottom: 100px; }
-
-/* --- FAQ Styles --- */
-.faq-section { width: 100%; text-align: left; margin-top: 10px; } /* Reduced from 20px */
-.faq-item { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 8px; margin-bottom: 8px; overflow: hidden; }
-summary { padding: 12px 15px; font-weight: 600; font-size: 14px; cursor: pointer; outline: none; transition: background 0.2s; }
-summary:hover { background: var(--border-color); }
-.faq-content { padding: 10px 15px; font-size: 13px; color: var(--text-muted); border-top: 1px solid var(--border-color); line-height: 1.5; }
-.faq-content ul { padding-left: 20px; margin: 5px 0; }
-
-/* --- Responsive Behavior --- */
-@media (max-width: 1024px) {
-    .sidebar-ad { display: none; }
+/* --- Utility Button Colors --- */
+.btn-download {
+    background-color: #f39c12 !important;
+    padding: 10px 15px !important;
 }
 
-@media (max-width: 900px) {
-    .app-container { height: auto; padding: 5px; width: 100%; }
-    .main-header { padding-bottom: 5px; }
-    .header-top { margin-bottom: 5px; }
-    h1 { font-size: 18px; }
-    
-    .main-layout-wrapper { display: block; height: auto; min-height: 250px; margin: 5px 0; }
-    .workspace { display: block; height: auto; margin-bottom: 5px; }
-    
-    /* User Friendly Scrollbar for Mobile */
-    #textInput::-webkit-scrollbar { width: 18px; } 
-    #textInput::-webkit-scrollbar-thumb { border: 2px solid var(--bg-card); }
+.btn-copy {
+    background-color: #28a745 !important;
+    padding: 10px 15px !important;
+}
 
-    #textInput { 
-        height: 280px;
-        min-height: 200px;
+.btn-clear {
+    background-color: #dc3545 !important;
+    padding: 10px 15px !important;
+}
+
+/* --- Toast Message --- */
+.toast {
+    visibility: hidden;
+    background: #28a745;
+    color: #fff;
+    padding: 12px;
+    border-radius: 8px;
+    position: fixed;
+    left: 50%;
+    bottom: 80px;
+    transform: translateX(-50%);
+    transition: 0.3s;
+    z-index: 10000;
+}
+
+.toast.show {
+    visibility: visible;
+    bottom: 100px;
+}
+
+/* --- Info Section --- */
+.info-section {
+    width: 100%;
+}
+
+.info-section p {
+    margin-top: -13px;
+}
+
+/* --- FAQ Section --- */
+.faq-section {
+    width: 100%;
+    text-align: left;
+}
+
+/* --- FAQ Items --- */
+.faq-item {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    margin-bottom: 8px;
+    overflow: hidden;
+}
+
+/* --- FAQ Question Row --- */
+summary {
+    padding: 12px 15px;
+    font-weight: 600;
+    font-size: 16px;
+    cursor: pointer;
+    outline: none;
+}
+
+summary:hover {
+    background: var(--border-color);
+}
+
+/* --- FAQ Answer Content --- */
+.faq-content {
+    padding: 5px 15px 8px 15px;
+    font-size: 15px;
+    color: var(--text-muted);
+    border-top: 1px solid var(--border-color);
+    line-height: 1.6;
+}
+
+.faq-content ul {
+    padding-left: 20px;
+    margin: 5px 0;
+}
+
+
+/* --- Site Footer --- */
+.site-footer {
+    font-size: 14px;
+    color: var(--text-muted);
+    padding: 15px 0;
+    text-align: center;
+    width: 100%;
+}
+
+
+/* --- Mobile Layout --- */
+@media (max-width: 600px) {
+    .header-top {
+        align-items: flex-start;
+        gap: 6px;
+    }
+
+    h1 {
+        font-size: 19px;
+        line-height: 1.2;
+    }
+
+    .theme-toggle-area {
+        margin-right: 0;
+        flex-shrink: 0;
+    }
+
+    .toolbar,
+    .text-format-controls,
+    .align-history-controls {
+        gap: 8px;
+    }
+
+    .font-size-wrapper {
+        gap: 7px;
+        min-height: 32px;
+    }
+
+    .format-btn {
+        min-height: 32px;
+    }
+
+    .align-group .format-btn {
+        padding-inline: 10px;
+    }
+
+    .history-controls {
+        gap: 2px;
+    }
+
+    .autosave-option {
+        font-size: 16px;
+        width: 100%;
+        margin-left: 0;
+        padding-right: 0;
+        justify-content: flex-start;
+    }
+
+    /* --- Autosave Checkbox --- */
+    .checkbox-container {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        cursor: default;
+        user-select: none;
+    }
+
+    .checkbox-container input {
+        cursor: pointer;
+        width: 16px;
+        height: 16px;
+    }
+
+    #textInput {
+        height: 42vh;
+        min-height: 220px;
+        max-height: 430px;
         padding: 12px;
-        font-size: 14px;
-        resize: vertical;
-        overflow-y: auto; 
+        line-height: 1.55;
     }
-    
-    .toolbar { 
-        flex-direction: row; 
-        justify-content: flex-start; 
-        gap: 6px; 
-        padding-right: 5px; 
+
+    .button-group {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 6px;
     }
-    
-    .toolbar-left-group { width: auto; justify-content: flex-start; gap: 6px; }
-    .align-undo-redo-wrapper { gap: 6px; }
-    
-    .save-option-toolbar { 
-        margin-left: 0; 
-        padding: 2px 0; 
-        width: 100%; 
-        justify-content: flex-start; 
-        font-size: 11px;
-        padding-right: 5px;
+
+    .tool-btn,
+    .tool-btn.case-btn {
+        min-width: 0;
+        width: 100%;
+        padding: 12px 8px !important;
+        font-size: 17px;
+        line-height: 1.2;
     }
-    
-    .format-btn { padding: 4px 8px; font-size: 14px; }
-    .font-size-wrapper { padding: 1px 8px; }
-    .size-btn { font-size: 16px; }
-    .icon-btn { font-size: 18px; padding: 2px 4px; }
-    
-    .button-group { gap: 4px; margin-bottom: 4px; }
-    
-    .tool-btn { 
-        min-width: 115px; 
-        padding: 15px 10px !important; 
-        font-size: 11px; 
-        flex: 0 1 auto; 
+
+    .seo-content p {
+        margin-bottom: 0;
     }
-    
-    .header-settings-group { margin-right: 5px; }
-    .tooltip { display: none !important; }
-    .top-banner { min-height: 50px; margin-bottom: 5px; }
-    .stats { font-size: 11px; margin-bottom: 5px; }
-    summary { font-size: 13px; }
-    .faq-content { font-size: 12px; }
+
+    .site-footer .footer-links {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 6px 0;
+        line-height: 1.6;
+    }
+}
+
+/* --- Very Small Mobile Layout --- */
+@media (max-width: 380px) {
+    .app-container {
+        padding-inline: 4px;
+    }
+
+    .align-group .format-btn {
+        padding-inline: 6px;
+        font-size: 13px;
+    }
+
+    .icon-btn {
+        padding-inline: 2px;
+    }
+
+    .button-group {
+        grid-template-columns: 1fr;
+    }
 }
