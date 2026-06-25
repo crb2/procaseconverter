@@ -2,29 +2,183 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
    <url>
       <loc>https://procaseconverter.online/</loc>
-      <lastmod>2026-06-25T23:27:02+05:30</lastmod>
+      <lastmod>2026-06-26</lastmod>
       <changefreq>weekly</changefreq>
       <priority>1.0</priority>
    </url>
-   
+
    <url>
       <loc>https://procaseconverter.online/about-us/</loc>
-      <lastmod>2026-06-25</lastmod>
+      <lastmod>2026-06-26</lastmod>
       <changefreq>monthly</changefreq>
       <priority>0.8</priority>
    </url>
 
    <url>
       <loc>https://procaseconverter.online/privacy-policy/</loc>
-      <lastmod>2026-06-25</lastmod>
+      <lastmod>2026-06-26</lastmod>
       <changefreq>monthly</changefreq>
       <priority>0.5</priority>
    </url>
 
    <url>
       <loc>https://procaseconverter.online/terms-and-conditions/</loc>
-      <lastmod>2026-06-25</lastmod>
+      <lastmod>2026-06-26</lastmod>
       <changefreq>monthly</changefreq>
       <priority>0.5</priority>
+   </url>
+
+   <url>
+      <loc>https://procaseconverter.online/sentence-case/</loc>
+      <lastmod>2026-06-26</lastmod>
+      <changefreq>weekly</changefreq>
+      <priority>0.8</priority>
+   </url>
+
+   <url>
+      <loc>https://procaseconverter.online/lower-case/</loc>
+      <lastmod>2026-06-26</lastmod>
+      <changefreq>weekly</changefreq>
+      <priority>0.8</priority>
+   </url>
+
+   <url>
+      <loc>https://procaseconverter.online/upper-case/</loc>
+      <lastmod>2026-06-26</lastmod>
+      <changefreq>weekly</changefreq>
+      <priority>0.8</priority>
+   </url>
+
+   <url>
+      <loc>https://procaseconverter.online/capitalized-case/</loc>
+      <lastmod>2026-06-26</lastmod>
+      <changefreq>weekly</changefreq>
+      <priority>0.8</priority>
+   </url>
+
+   <url>
+      <loc>https://procaseconverter.online/title-case/</loc>
+      <lastmod>2026-06-26</lastmod>
+      <changefreq>weekly</changefreq>
+      <priority>0.8</priority>
+   </url>
+
+   <url>
+      <loc>https://procaseconverter.online/snake-case/</loc>
+      <lastmod>2026-06-26</lastmod>
+      <changefreq>weekly</changefreq>
+      <priority>0.8</priority>
+   </url>
+
+   <url>
+      <loc>https://procaseconverter.online/kebab-case/</loc>
+      <lastmod>2026-06-26</lastmod>
+      <changefreq>weekly</changefreq>
+      <priority>0.8</priority>
+   </url>
+
+   <url>
+      <loc>https://procaseconverter.online/train-case/</loc>
+      <lastmod>2026-06-26</lastmod>
+      <changefreq>weekly</changefreq>
+      <priority>0.8</priority>
+   </url>
+
+   <url>
+      <loc>https://procaseconverter.online/dot-case/</loc>
+      <lastmod>2026-06-26</lastmod>
+      <changefreq>weekly</changefreq>
+      <priority>0.8</priority>
+   </url>
+
+   <url>
+      <loc>https://procaseconverter.online/path-case/</loc>
+      <lastmod>2026-06-26</lastmod>
+      <changefreq>weekly</changefreq>
+      <priority>0.8</priority>
+   </url>
+
+   <url>
+      <loc>https://procaseconverter.online/space-case/</loc>
+      <lastmod>2026-06-26</lastmod>
+      <changefreq>weekly</changefreq>
+      <priority>0.8</priority>
+   </url>
+
+   <url>
+      <loc>https://procaseconverter.online/flatcase/</loc>
+      <lastmod>2026-06-26</lastmod>
+      <changefreq>weekly</changefreq>
+      <priority>0.8</priority>
+   </url>
+
+   <url>
+      <loc>https://procaseconverter.online/upperflatcase/</loc>
+      <lastmod>2026-06-26</lastmod>
+      <changefreq>weekly</changefreq>
+      <priority>0.8</priority>
+   </url>
+
+   <url>
+      <loc>https://procaseconverter.online/studlycaps-random-case/</loc>
+      <lastmod>2026-06-26</lastmod>
+      <changefreq>weekly</changefreq>
+      <priority>0.8</priority>
+   </url>
+
+   <url>
+      <loc>https://procaseconverter.online/camel-case/</loc>
+      <lastmod>2026-06-26</lastmod>
+      <changefreq>weekly</changefreq>
+      <priority>0.8</priority>
+   </url>
+
+   <url>
+      <loc>https://procaseconverter.online/pascal-case/</loc>
+      <lastmod>2026-06-26</lastmod>
+      <changefreq>weekly</changefreq>
+      <priority>0.8</priority>
+   </url>
+
+   <url>
+      <loc>https://procaseconverter.online/screaming-snake-case/</loc>
+      <lastmod>2026-06-26</lastmod>
+      <changefreq>weekly</changefreq>
+      <priority>0.8</priority>
+   </url>
+
+   <url>
+      <loc>https://procaseconverter.online/inverse-case/</loc>
+      <lastmod>2026-06-26</lastmod>
+      <changefreq>weekly</changefreq>
+      <priority>0.8</priority>
+   </url>
+
+   <url>
+      <loc>https://procaseconverter.online/alternating-case/</loc>
+      <lastmod>2026-06-26</lastmod>
+      <changefreq>weekly</changefreq>
+      <priority>0.8</priority>
+   </url>
+
+   <url>
+      <loc>https://procaseconverter.online/reverse-case/</loc>
+      <lastmod>2026-06-26</lastmod>
+      <changefreq>weekly</changefreq>
+      <priority>0.8</priority>
+   </url>
+
+   <url>
+      <loc>https://procaseconverter.online/remove-emoji/</loc>
+      <lastmod>2026-06-26</lastmod>
+      <changefreq>weekly</changefreq>
+      <priority>0.8</priority>
+   </url>
+
+   <url>
+      <loc>https://procaseconverter.online/remove-html/</loc>
+      <lastmod>2026-06-26</lastmod>
+      <changefreq>weekly</changefreq>
+      <priority>0.8</priority>
    </url>
 </urlset>

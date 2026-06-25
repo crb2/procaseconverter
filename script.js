@@ -1,7 +1,10 @@
 const textArea = document.getElementById('textInput');
 const charCount = document.getElementById('charCount');
+const charNoSpaceCount = document.getElementById('charNoSpaceCount');
 const wordCount = document.getElementById('wordCount');
 const lineCount = document.getElementById('lineCount');
+const paragraphCount = document.getElementById('paragraphCount');
+const sentenceCount = document.getElementById('sentenceCount');
 const themeCheckbox = document.getElementById('themeCheckbox');
 const saveCheckbox = document.getElementById('saveProgress');
 const fontSizeDisplay = document.getElementById('fontSizeDisplay');
@@ -177,9 +180,14 @@ function closeTooltip(e, el) { e.stopPropagation(); el.parentElement.style.displ
 // --- 6. CORE TRANSFORMATIONS ---
 function updateStats() {
     const text = textArea.innerText || "";
+    const trimmedText = text.trim();
+    const lineText = text.replace(/\r\n/g, '\n').replace(/\r/g, '\n').replace(/\n$/, '');
     charCount.innerText = text.length;
-    wordCount.innerText = text.trim() === "" ? 0 : text.trim().split(/\s+/).length;
-    lineCount.innerText = (text === "" || text === "\n") ? 0 : text.split(/\r|\r\n|\n/).length;
+    charNoSpaceCount.innerText = text.replace(/\s/g, '').length;
+    wordCount.innerText = trimmedText === "" ? 0 : trimmedText.split(/\s+/).length;
+    lineCount.innerText = lineText === "" ? 0 : lineText.split('\n').length;
+    paragraphCount.innerText = trimmedText === "" ? 0 : trimmedText.split(/\n\s*\n|(?:\r\n|\r|\n)/).filter(p => p.trim() !== "").length;
+    sentenceCount.innerText = trimmedText === "" ? 0 : (trimmedText.match(/[^.!?]+[.!?]+(?:\s|$)|[^.!?]+$/g) || []).filter(s => s.trim() !== "").length;
 }
 
 function saveState(state = textArea.innerHTML) {
@@ -328,6 +336,42 @@ function toScreamingSnakeCase() {
 
 function toInverseCase() { applyTransformation(t => t.split('').map(c => c === c.toUpperCase() ? c.toLowerCase() : c.toUpperCase()).join(''), 'inverse'); }
 function toAlternatingCase() { applyTransformation(t => { let chars = t.toLowerCase().split(''); for (let i = 0; i < chars.length; i++) if (i % 2 !== 0) chars[i] = chars[i].toUpperCase(); return chars.join(''); }, 'alternating'); }
+function toReverseCase() { applyTransformation(t => Array.from(t).reverse().join(''), 'reverse'); }
+function removeEmoji() { applyTransformation(t => t.replace(/[\p{Emoji_Presentation}\p{Extended_Pictographic}\uFE0F\u200D]/gu, ''), 'removeEmoji'); }
+function removeHTML() {
+    const html = textArea.innerHTML;
+    const text = textArea.innerText.replace(/\n$/, "");
+    const savedToggle = transformationToggles.removeHTML;
+
+    if (savedToggle && savedToggle.converted === text) {
+        return;
+    } else {
+        saveState();
+        const hasLiteralHTMLTags = /<[^>]*>/g.test(text);
+        let converted;
+
+        if (hasLiteralHTMLTags) {
+            converted = text.replace(/<[^>]*>/g, '');
+        } else {
+            const temp = document.createElement('div');
+            temp.innerHTML = html;
+            converted = temp.innerText.replace(/\n$/, "");
+        }
+
+        transformationToggles.removeHTML = {
+            originalHTML: html,
+            originalText: text,
+            converted: converted,
+            restoreAsHTML: !hasLiteralHTMLTags
+        };
+
+        textArea.innerText = converted;
+    }
+
+    lastHistoryState = textArea.innerHTML;
+    updateStats();
+    autoSave();
+}
 
 // --- 7. HISTORY ACTIONS ---
 function undo() { if (historyStack.length > 0) { isRestoringHistory = true; redoStack.push(textArea.innerHTML); textArea.innerHTML = historyStack.pop(); lastHistoryState = textArea.innerHTML; updateStats(); autoSave(); isRestoringHistory = false; } }
