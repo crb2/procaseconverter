@@ -20,6 +20,7 @@ let holdTimer;
 let historyTimer;
 let lastHistoryState = '';
 let isRestoringHistory = false;
+let transformationToggles = {};
 
 // --- 1. INITIALIZATION ---
 window.addEventListener('load', () => {
@@ -190,29 +191,143 @@ function saveState(state = textArea.innerHTML) {
     }
 }
 
-function applyTransformation(action) {
+function applyTransformation(action, toggleKey) {
     saveState();
     // Strip trailing newline added by contenteditable to prevent extra spaces
     let text = textArea.innerText.replace(/\n$/, "");
-    textArea.innerText = action(text);
+
+    if (toggleKey && transformationToggles[toggleKey] && transformationToggles[toggleKey].converted === text) {
+        textArea.innerText = transformationToggles[toggleKey].original;
+    } else {
+        const converted = action(text);
+        if (toggleKey) {
+            transformationToggles[toggleKey] = {
+                original: text,
+                converted: converted
+            };
+        }
+        textArea.innerText = converted;
+    }
+
     lastHistoryState = textArea.innerHTML;
     updateStats();
     autoSave();
 }
 
-function toUpperCase() { applyTransformation(t => t.toUpperCase()); }
-function toLowerCase() { applyTransformation(t => t.toLowerCase()); }
+function toUpperCase() { applyTransformation(t => t.toUpperCase(), 'upper'); }
+function toLowerCase() { applyTransformation(t => t.toLowerCase(), 'lower'); }
 
 function toSentenceCase() { 
-    applyTransformation(t => t.toLowerCase().replace(/(^\s*\w|[.!?]\s+\w)/g, s => s.toUpperCase())); 
+    applyTransformation(t => t.toLowerCase().replace(/(^\s*\w|[.!?]\s+\w)/g, s => s.toUpperCase()), 'sentence'); 
 }
 
 function toCapitalizedCase() { 
-    applyTransformation(t => t.toLowerCase().replace(/\b\w/g, s => s.toUpperCase())); 
+    applyTransformation(t => t.toLowerCase().replace(/\b\w/g, s => s.toUpperCase()), 'capitalized'); 
 }
 
-function toInverseCase() { applyTransformation(t => t.split('').map(c => c === c.toUpperCase() ? c.toLowerCase() : c.toUpperCase()).join('')); }
-function toAlternatingCase() { applyTransformation(t => { let chars = t.toLowerCase().split(''); for (let i = 0; i < chars.length; i++) if (i % 2 !== 0) chars[i] = chars[i].toUpperCase(); return chars.join(''); }); }
+function toTitleCase() {
+    applyTransformation(t => {
+        const smallWords = ['a', 'an', 'and', 'as', 'at', 'but', 'by', 'for', 'in', 'nor', 'of', 'on', 'or', 'per', 'the', 'to', 'vs', 'via'];
+        const words = t.toLowerCase().split(/(\s+)/);
+
+        return words.map((word, index) => {
+            if (/^\s+$/.test(word)) return word;
+            const isFirstOrLast = index === 0 || index === words.length - 1;
+            if (!isFirstOrLast && smallWords.includes(word)) return word;
+            return word.replace(/\b\w/g, s => s.toUpperCase());
+        }).join('');
+    }, 'title');
+}
+
+function toSnakeCase() {
+    applyTransformation(t => {
+        const text = t.trim();
+
+        return text.replace(/\s+/g, '_');
+    }, 'snake');
+}
+
+function toKebabCase() {
+    applyTransformation(t => {
+        const text = t.trim();
+
+        return text.replace(/\s+/g, '-');
+    }, 'kebab');
+}
+
+function toTrainCase() {
+    applyTransformation(t => {
+        const text = t.trim();
+
+        return text.toLowerCase().replace(/\b\w/g, s => s.toUpperCase()).replace(/\s+/g, '-');
+    }, 'train');
+}
+
+function toDotCase() {
+    applyTransformation(t => {
+        const text = t.trim();
+
+        return text.toLowerCase().replace(/[-_\s/]+/g, '.');
+    }, 'dot');
+}
+
+function toPathCase() {
+    applyTransformation(t => {
+        const text = t.trim();
+
+        return text.toLowerCase().replace(/[-_\s.]+/g, '/');
+    }, 'path');
+}
+
+function toSpaceCase() {
+    applyTransformation(t => {
+        const text = t.trim();
+
+        return text.toLowerCase().replace(/[-_./]+/g, ' ').replace(/\s+/g, ' ');
+    }, 'space');
+}
+
+function toFlatCase() {
+    applyTransformation(t => t.toLowerCase().replace(/[-_\s./]+/g, ''), 'flat');
+}
+
+function toUpperFlatCase() {
+    applyTransformation(t => t.toUpperCase().replace(/[-_\s./]+/g, ''), 'upperFlat');
+}
+
+function toStudlyCaps() {
+    applyTransformation(t => t.split('').map(c => /[a-z]/i.test(c) ? (Math.random() < 0.5 ? c.toLowerCase() : c.toUpperCase()) : c).join(''), 'studlyCaps');
+}
+
+function toCamelCase() {
+    applyTransformation(t => {
+        const text = t.trim();
+
+        return text
+            .replace(/[-_\s]+(.)?/g, (match, char) => char ? char.toUpperCase() : '')
+            .replace(/^./, char => char.toLowerCase());
+    }, 'camel');
+}
+
+function toPascalCase() {
+    applyTransformation(t => {
+        const text = t.trim();
+
+        return text
+            .replace(/(?:^|[-_\s]+)(.)?/g, (match, char) => char ? char.toUpperCase() : '');
+    }, 'pascal');
+}
+
+function toScreamingSnakeCase() {
+    applyTransformation(t => {
+        const text = t.trim();
+
+        return text.toUpperCase().replace(/\s+/g, '_');
+    }, 'screamingSnake');
+}
+
+function toInverseCase() { applyTransformation(t => t.split('').map(c => c === c.toUpperCase() ? c.toLowerCase() : c.toUpperCase()).join(''), 'inverse'); }
+function toAlternatingCase() { applyTransformation(t => { let chars = t.toLowerCase().split(''); for (let i = 0; i < chars.length; i++) if (i % 2 !== 0) chars[i] = chars[i].toUpperCase(); return chars.join(''); }, 'alternating'); }
 
 // --- 7. HISTORY ACTIONS ---
 function undo() { if (historyStack.length > 0) { isRestoringHistory = true; redoStack.push(textArea.innerHTML); textArea.innerHTML = historyStack.pop(); lastHistoryState = textArea.innerHTML; updateStats(); autoSave(); isRestoringHistory = false; } }

@@ -6,8 +6,8 @@
 
 /* --- Light Theme Variables --- */
 :root {
-    --bg-body: #f4f7f6;
-    --bg-card: #ffffff;
+    --bg-body: #d9e4eb;
+    --bg-card: #f6f9fa;
     --text-main: #000000;
     --text-muted: #666666;
     --primary-color: #007bff;
@@ -306,8 +306,8 @@ h1 {
 
 #textInput {
     flex-grow: 1;
-    min-height: 350px;
-    height: clamp(300px, 58vh, 620px);
+    min-height: 200px;
+    height: clamp(300px, 58vh, 200px);
     width: 100%;
     padding: 20px;
     background-color: var(--bg-card);
@@ -436,10 +436,15 @@ kbd {
     min-width: 120px;
     min-height: 44px;
     transition: padding 0.2s;
+    text-align: center;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    word-break: break-word;
 }
 
 .tool-btn.case-btn {
     padding: 15px 10px;
+    min-height: 58px;
 }
 
 /* --- Utility Button Colors --- */
