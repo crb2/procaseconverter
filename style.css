@@ -633,8 +633,7 @@ summary:hover {
     left: 0;
     top: 100%;
     z-index: 50;
-    width: min(680px, calc(100vw - 40px));
-    min-width: 520px;
+    width: min(620px, calc(100vw - 40px));
     padding: 18px 24px;
     background: var(--bg-card);
     border: 1px solid var(--border-color);
@@ -648,7 +647,7 @@ summary:hover {
 
 .site-nav .tool-menu-list {
     left: auto;
-    right: 0;
+    right: 12px;
 }
 
 .tool-menu:hover .tool-menu-list,
@@ -666,6 +665,14 @@ summary:hover {
 
 .tool-page {
     width: 100%;
+}
+
+@media (max-width: 1200px) {
+    .tool-menu-list {
+        width: min(520px, calc(100vw - 32px));
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px 20px;
+    }
 }
 
 .tool-hero {
@@ -874,6 +881,13 @@ summary:hover {
 }
 
 @media (max-width: 600px) {
+    .tooltip,
+    .has-tooltip:hover .tooltip {
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+    }
+
     .header-top {
         display: grid;
         grid-template-columns: minmax(0, 1fr) auto;
