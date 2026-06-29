@@ -929,10 +929,18 @@ summary:hover {
         margin-left: 4px;
     }
 
-    .toolbar,
+    .toolbar {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+        gap: 8px;
+        row-gap: 10px;
+    }
+
     .text-format-controls,
     .align-history-controls {
-        gap: 8px;
+        display: contents;
     }
 
     .font-size-wrapper {
@@ -948,13 +956,21 @@ summary:hover {
         padding-inline: 10px;
     }
 
+    .align-group {
+        flex: 0 1 auto;
+    }
+
     .history-controls {
+        order: 6;
         gap: 2px;
+        margin-left: auto;
     }
 
     .autosave-option {
+        order: 5;
         font-size: 16px;
-        width: 100%;
+        flex: 1 1 220px;
+        min-width: 0;
         margin-left: 0;
         padding-right: 0;
         justify-content: flex-start;
