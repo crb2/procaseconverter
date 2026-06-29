@@ -25,8 +25,78 @@ let lastHistoryState = '';
 let isRestoringHistory = false;
 let transformationToggles = {};
 
+function initializeToolMenu() {
+    const menu = document.querySelector('.tool-menu');
+    const menuButton = menu?.querySelector('button');
+    const menuList = menu?.querySelector('.tool-menu-list');
+    if (!menu || !menuButton || !menuList) return;
+
+    let pinnedOpen = false;
+
+    const syncMenuState = () => {
+        menu.classList.toggle('is-open', pinnedOpen);
+        menuButton.setAttribute('aria-expanded', String(
+            pinnedOpen || menu.classList.contains('is-hovered')
+        ));
+    };
+
+    const setHovered = isHovered => {
+        if (window.innerWidth <= 600) return;
+        menu.classList.toggle('is-hovered', isHovered);
+        syncMenuState();
+    };
+
+    syncMenuState();
+
+    menu.addEventListener('mouseenter', () => setHovered(true));
+    menu.addEventListener('mouseleave', () => setHovered(false));
+
+    menuButton.addEventListener('click', event => {
+        event.preventDefault();
+        event.stopPropagation();
+        pinnedOpen = !pinnedOpen;
+        syncMenuState();
+    });
+
+    menuList.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => {
+            pinnedOpen = false;
+            menu.classList.remove('is-hovered');
+            syncMenuState();
+        });
+    });
+
+    document.addEventListener('click', event => {
+        if (!menu.contains(event.target)) {
+            pinnedOpen = false;
+            menu.classList.remove('is-hovered');
+            syncMenuState();
+        }
+    });
+
+    window.addEventListener('keydown', event => {
+        if (event.key === 'Escape') {
+            pinnedOpen = false;
+            menu.classList.remove('is-hovered');
+            syncMenuState();
+        }
+    });
+
+    window.addEventListener('resize', () => {
+        if (window.innerWidth <= 600) {
+            menu.classList.remove('is-hovered');
+        }
+        if (window.innerWidth > 600) {
+            pinnedOpen = false;
+        }
+        syncMenuState();
+    });
+}
+
 // --- 1. INITIALIZATION ---
 window.addEventListener('load', () => {
+    initializeToolMenu();
+
     const shouldSave = localStorage.getItem('allowAutoSave') === 'true';
     saveCheckbox.checked = shouldSave;
     
