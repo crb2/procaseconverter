@@ -1020,7 +1020,7 @@ summary:hover {
         left: 0;
         top: calc(100% + 10px);
         right: auto;
-        width: min(320px, calc(55vw - 24px));
+        width: min(320px, calc(60vw - 24px));
         min-width: 0;
         max-width: calc(100vw - 24px);
         max-height: min(52vh, 420px);
