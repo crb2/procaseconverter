@@ -5,7 +5,6 @@ const wordCount = document.getElementById('wordCount');
 const lineCount = document.getElementById('lineCount');
 const paragraphCount = document.getElementById('paragraphCount');
 const sentenceCount = document.getElementById('sentenceCount');
-const themeCheckbox = document.getElementById('themeCheckbox');
 const saveCheckbox = document.getElementById('saveProgress');
 const fontSizeDisplay = document.getElementById('fontSizeDisplay');
 const fontSizeInput = document.getElementById('fontSizeInput');
@@ -15,6 +14,40 @@ const undoBtn = document.getElementById('undoBtn');
 const redoBtn = document.getElementById('redoBtn');
 const boldBtn = document.getElementById('boldBtn');
 const italicBtn = document.getElementById('italicBtn');
+
+const SUN_SVG = `<svg class="theme-btn-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>`;
+const MOON_SVG = `<svg class="theme-btn-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>`;
+
+function getSavedTheme() {
+    return localStorage.getItem('theme') || 'dark';
+}
+
+function applyTheme(theme) {
+    const isDark = theme === 'dark';
+    document.body.classList.toggle('dark-mode', isDark);
+    localStorage.setItem('theme', theme);
+
+    const themeBtn = document.getElementById('themeBtn');
+    if (themeBtn) {
+        if (isDark) {
+            themeBtn.innerHTML = MOON_SVG;
+            themeBtn.setAttribute('aria-label', 'Switch to Light Mode');
+        } else {
+            themeBtn.innerHTML = SUN_SVG;
+            themeBtn.setAttribute('aria-label', 'Switch to Dark Mode');
+        }
+    }
+
+    if (textArea) {
+        textArea.style.color = isDark ? '#ffffff' : '#1c1c1c';
+    }
+}
+
+function cycleTheme() {
+    const current = getSavedTheme();
+    const nextTheme = current === 'dark' ? 'light' : 'dark';
+    applyTheme(nextTheme);
+}
 
 let historyStack = [];
 let redoStack = [];
@@ -120,16 +153,7 @@ window.addEventListener('load', () => {
     currentFontSize = savedFontSize ? parseInt(savedFontSize) : 16;
     applyFontSize();
     
-    const savedTheme = localStorage.getItem('theme');
-    if(savedTheme === 'light') {
-        themeCheckbox.checked = false;
-        document.body.classList.remove('dark-mode');
-        textArea.style.color = "#000000";
-    } else {
-        themeCheckbox.checked = true;
-        document.body.classList.add('dark-mode');
-        textArea.style.color = "#ffffff";
-    }
+    applyTheme(getSavedTheme());
 
     lastHistoryState = textArea.innerHTML;
 });
@@ -234,16 +258,7 @@ function toggleSavePreference() {
     }
 }
 
-function toggleTheme() {
-    const isDark = themeCheckbox.checked;
-    document.body.classList.toggle('dark-mode', isDark);
-    localStorage.setItem('theme', isDark ? 'dark' : 'light');
-    if (!isDark) {
-        textArea.style.color = "#000000";
-    } else {
-        textArea.style.color = "#ffffff";
-    }
-}
+
 
 function closeTooltip(e, el) { e.stopPropagation(); el.parentElement.style.display = 'none'; }
 
@@ -476,3 +491,176 @@ function copyText() {
         setTimeout(() => toast.classList.remove('show'), 2500);
     });
 }
+
+// --- 8. DIRECTION-AWARE SCROLL NAVIGATION ---
+function initScrollButtons() {
+    if (document.getElementById('scrollTopBtn')) return;
+
+    const scrollTopBtn = document.createElement('button');
+    scrollTopBtn.id = 'scrollTopBtn';
+    scrollTopBtn.className = 'scroll-nav-btn scroll-top-btn';
+    scrollTopBtn.setAttribute('type', 'button');
+    scrollTopBtn.setAttribute('aria-label', 'Scroll to Top');
+    scrollTopBtn.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>`;
+    document.body.appendChild(scrollTopBtn);
+
+    const scrollBottomBtn = document.createElement('button');
+    scrollBottomBtn.id = 'scrollBottomBtn';
+    scrollBottomBtn.className = 'scroll-nav-btn scroll-bottom-btn';
+    scrollBottomBtn.setAttribute('type', 'button');
+    scrollBottomBtn.setAttribute('aria-label', 'Scroll to Bottom');
+    scrollBottomBtn.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>`;
+    document.body.appendChild(scrollBottomBtn);
+
+    function hideBothArrows() {
+        scrollTopBtn.classList.remove('visible');
+        scrollBottomBtn.classList.remove('visible');
+    }
+
+    scrollTopBtn.addEventListener('click', function () {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    scrollBottomBtn.addEventListener('click', function () {
+        window.scrollTo({ top: document.documentElement.scrollHeight, behavior: 'smooth' });
+    });
+
+    let lastScrollY = window.scrollY;
+
+    function updateScrollNav() {
+        const currentScrollY = window.scrollY;
+        const pageHeight = document.documentElement.scrollHeight;
+        const viewHeight = window.innerHeight;
+        const atTop = currentScrollY <= 2;
+        const atBottom = !atTop && (currentScrollY + viewHeight >= pageHeight - 2);
+
+        if (atTop || atBottom) {
+            hideBothArrows();
+        } else {
+            const isScrollingDown = currentScrollY > lastScrollY;
+            const isScrollingUp = currentScrollY < lastScrollY;
+
+            if (isScrollingDown) {
+                scrollBottomBtn.classList.add('visible');
+                scrollTopBtn.classList.remove('visible');
+            } else if (isScrollingUp) {
+                scrollTopBtn.classList.add('visible');
+                scrollBottomBtn.classList.remove('visible');
+            }
+        }
+
+        lastScrollY = currentScrollY;
+    }
+
+    window.addEventListener('scroll', updateScrollNav, { passive: true });
+    window.addEventListener('resize', updateScrollNav, { passive: true });
+    updateScrollNav();
+}
+
+document.addEventListener('DOMContentLoaded', initScrollButtons);
+if (document.readyState === 'interactive' || document.readyState === 'complete') {
+    initScrollButtons();
+}
+
+// --- 9. RIGHT-SIDE CASE-TOOL MENU PANEL ---
+const TOOL_ITEMS_HTML = `
+    <a href="/sentence-case/">Sentence case</a>
+    <a href="/lower-case/">lower case</a>
+    <a href="/upper-case/">UPPER CASE</a>
+    <a href="/capitalized-case/">Capitalized Case</a>
+    <a href="/title-case/">Title Case</a>
+    <a href="/snake-case/">Snake_Case</a>
+    <a href="/kebab-case/">Kebab-Case</a>
+    <a href="/train-case/">Train-Case</a>
+    <a href="/dot-case/">dot.case</a>
+    <a href="/path-case/">path/case</a>
+    <a href="/space-case/">space case</a>
+    <a href="/flatcase/">flatcase</a>
+    <a href="/upperflatcase/">UPPERFLATCASE</a>
+    <a href="/studlycaps-random-case/">StudlyCaps (Random Case)</a>
+    <a href="/camel-case/">Camel Case</a>
+    <a href="/pascal-case/">Pascal Case</a>
+    <a href="/screaming-snake-case/">SCREAMING_SNAKE_CASE</a>
+    <a href="/inverse-case/">iNVERSE cASE</a>
+    <a href="/alternating-case/">aLtErNaTiNg cAsE</a>
+    <a href="/reverse-case/">Reverse Case</a>
+    <a href="/remove-emoji/">Remove Emoji</a>
+    <a href="/remove-html/">Remove HTML</a>
+`;
+
+function createSideMenuPanel() {
+    if (document.getElementById('sideMenuPanel')) return;
+
+    const overlay = document.createElement('div');
+    overlay.id = 'sideMenuOverlay';
+    overlay.className = 'side-menu-overlay';
+    overlay.onclick = closeSideMenu;
+    document.body.appendChild(overlay);
+
+    const panel = document.createElement('div');
+    panel.id = 'sideMenuPanel';
+    panel.className = 'side-menu-panel';
+    panel.setAttribute('aria-hidden', 'true');
+    panel.innerHTML = `
+        <div class="side-menu-header">
+            <h3>Convert Case Tools</h3>
+            <button type="button" class="side-menu-close" id="sideMenuCloseBtn" onclick="closeSideMenu()" aria-label="Close Menu">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+        </div>
+        <div class="side-menu-grid">
+            ${TOOL_ITEMS_HTML}
+        </div>
+    `;
+    document.body.appendChild(panel);
+}
+
+function openSideMenu() {
+    createSideMenuPanel();
+    const panel = document.getElementById('sideMenuPanel');
+    const overlay = document.getElementById('sideMenuOverlay');
+    if (panel) {
+        panel.classList.add('open');
+        panel.setAttribute('aria-hidden', 'false');
+    }
+    if (overlay) {
+        overlay.classList.add('open');
+    }
+}
+
+function closeSideMenu() {
+    const panel = document.getElementById('sideMenuPanel');
+    const overlay = document.getElementById('sideMenuOverlay');
+    if (panel) {
+        panel.classList.remove('open');
+        panel.setAttribute('aria-hidden', 'true');
+    }
+    if (overlay) {
+        overlay.classList.remove('open');
+    }
+}
+
+function toggleSideMenu() {
+    const panel = document.getElementById('sideMenuPanel');
+    if (panel && panel.classList.contains('open')) {
+        closeSideMenu();
+    } else {
+        openSideMenu();
+    }
+}
+
+document.addEventListener('click', function (e) {
+    const panel = document.getElementById('sideMenuPanel');
+    const menuBtn = document.getElementById('menuBtn');
+    if (!panel || !panel.classList.contains('open')) return;
+
+    if (!panel.contains(e.target) && (!menuBtn || !menuBtn.contains(e.target))) {
+        closeSideMenu();
+    }
+});
+
+window.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') {
+        closeSideMenu();
+    }
+});

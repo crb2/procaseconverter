@@ -102,76 +102,8 @@ const toolConfigs = {
     }
 };
 
-function initializeToolMenu() {
-    const menu = document.querySelector('.tool-menu');
-    const menuButton = menu?.querySelector('button');
-    const menuList = menu?.querySelector('.tool-menu-list');
-    if (!menu || !menuButton || !menuList) return;
-
-    let pinnedOpen = false;
-
-    const syncMenuState = () => {
-        menu.classList.toggle('is-open', pinnedOpen);
-        menuButton.setAttribute('aria-expanded', String(
-            pinnedOpen || menu.classList.contains('is-hovered')
-        ));
-    };
-
-    const setHovered = isHovered => {
-        if (window.innerWidth <= 600) return;
-        menu.classList.toggle('is-hovered', isHovered);
-        syncMenuState();
-    };
-
-    syncMenuState();
-
-    menu.addEventListener('mouseenter', () => setHovered(true));
-    menu.addEventListener('mouseleave', () => setHovered(false));
-
-    menuButton.addEventListener('click', event => {
-        event.preventDefault();
-        event.stopPropagation();
-        pinnedOpen = !pinnedOpen;
-        syncMenuState();
-    });
-
-    menuList.querySelectorAll('a').forEach(link => {
-        link.addEventListener('click', () => {
-            pinnedOpen = false;
-            menu.classList.remove('is-hovered');
-            syncMenuState();
-        });
-    });
-
-    document.addEventListener('click', event => {
-        if (!menu.contains(event.target)) {
-            pinnedOpen = false;
-            menu.classList.remove('is-hovered');
-            syncMenuState();
-        }
-    });
-
-    window.addEventListener('keydown', event => {
-        if (event.key === 'Escape') {
-            pinnedOpen = false;
-            menu.classList.remove('is-hovered');
-            syncMenuState();
-        }
-    });
-
-    window.addEventListener('resize', () => {
-        if (window.innerWidth <= 600) {
-            menu.classList.remove('is-hovered');
-        }
-        if (window.innerWidth > 600) {
-            pinnedOpen = false;
-        }
-        syncMenuState();
-    });
-}
 
 document.addEventListener('DOMContentLoaded', () => {
-    initializeToolMenu();
 
     const page = document.querySelector('.tool-page');
     if (!page) return;
@@ -203,36 +135,75 @@ document.addEventListener('DOMContentLoaded', () => {
         toastTimer = setTimeout(() => toast.classList.remove('show'), 2500);
     };
 
+    const SUN_SVG = `<svg class="theme-btn-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>`;
+    const MOON_SVG = `<svg class="theme-btn-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>`;
+
+    const getSavedTheme = () => localStorage.getItem('theme') || 'dark';
+
+    const applyTheme = theme => {
+        const isDark = theme === 'dark';
+        document.body.classList.toggle('dark-mode', isDark);
+        localStorage.setItem('theme', theme);
+
+        const themeBtn = document.getElementById('themeBtn');
+        if (themeBtn) {
+            if (isDark) {
+                themeBtn.innerHTML = MOON_SVG;
+                themeBtn.setAttribute('aria-label', 'Switch to Light Mode');
+            } else {
+                themeBtn.innerHTML = SUN_SVG;
+                themeBtn.setAttribute('aria-label', 'Switch to Dark Mode');
+            }
+        }
+
+        const toolInput = document.getElementById('toolInput');
+        const toolOutput = document.getElementById('toolOutput');
+        if (toolInput) toolInput.style.color = isDark ? '#ffffff' : '#1c1c1c';
+        if (toolOutput) toolOutput.style.color = isDark ? '#ffffff' : '#1c1c1c';
+    };
+
+    const cycleTheme = () => {
+        const current = getSavedTheme();
+        const nextTheme = current === 'dark' ? 'light' : 'dark';
+        applyTheme(nextTheme);
+    };
+
     const headerTop = document.querySelector('.header-top');
-    if (headerTop && !document.getElementById('themeCheckbox')) {
+    if (headerTop && !document.getElementById('themeBtn')) {
+        let headerLeft = headerTop.querySelector('.header-left');
+        if (!headerLeft) {
+            headerLeft = document.createElement('div');
+            headerLeft.className = 'header-left';
+            headerTop.insertBefore(headerLeft, headerTop.firstChild);
+        }
+        let headerRight = headerTop.querySelector('.header-right');
+        if (!headerRight) {
+            headerRight = document.createElement('div');
+            headerRight.className = 'header-right';
+            const siteNav = headerTop.querySelector('.site-nav');
+            if (siteNav) headerRight.appendChild(siteNav);
+            headerTop.appendChild(headerRight);
+        }
         const themeArea = document.createElement('div');
         themeArea.className = 'theme-toggle-area';
         themeArea.innerHTML = `
-            <div class="theme-toggle">
-                <span class="icon">☀️</span>
-                <label class="switch">
-                    <input type="checkbox" id="themeCheckbox" checked>
-                    <span class="slider round"></span>
-                </label>
-                <span class="icon">🌙</span>
-            </div>
+            <button type="button" class="theme-toggle-btn" id="themeBtn" aria-label="Toggle Theme">
+            </button>
+            <button type="button" class="theme-toggle-btn" id="menuBtn" aria-label="Toggle Menu">
+                <svg class="menu-btn-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+            </button>
         `;
-        headerTop.appendChild(themeArea);
+        headerRight.appendChild(themeArea);
+        document.getElementById('themeBtn').addEventListener('click', cycleTheme);
+        document.getElementById('menuBtn').addEventListener('click', toggleSideMenu);
+    } else if (document.getElementById('themeBtn')) {
+        document.getElementById('themeBtn').addEventListener('click', cycleTheme);
+        if (document.getElementById('menuBtn')) {
+            document.getElementById('menuBtn').addEventListener('click', toggleSideMenu);
+        }
     }
 
-    const themeCheckbox = document.getElementById('themeCheckbox');
-    const applyTheme = isDark => {
-        document.body.classList.toggle('dark-mode', isDark);
-        localStorage.setItem('theme', isDark ? 'dark' : 'light');
-    };
-
-    if (themeCheckbox) {
-        const savedTheme = localStorage.getItem('theme');
-        const isDark = savedTheme !== 'light';
-        themeCheckbox.checked = isDark;
-        applyTheme(isDark);
-        themeCheckbox.addEventListener('change', () => applyTheme(themeCheckbox.checked));
-    }
+    applyTheme(getSavedTheme());
 
     const hero = document.querySelector('.tool-hero');
     if (hero && !document.querySelector('.tool-page-controls')) {
@@ -242,11 +213,11 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="toolbar">
                 <div class="text-format-controls">
                     <div class="font-size-wrapper">
-                        <button class="size-btn" type="button" id="toolMinusBtn">−</button>
+                        <button class="size-btn" type="button" id="toolMinusBtn" aria-label="Decrease font size"><svg class="size-btn-svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle;"><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
                         <div class="size-display-container">
                             <span id="toolFontSizeDisplay">16</span>
                         </div>
-                        <button class="size-btn" type="button" id="toolPlusBtn">+</button>
+                        <button class="size-btn" type="button" id="toolPlusBtn" aria-label="Increase font size"><svg class="size-btn-svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle;"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
                     </div>
                     <button class="format-btn" type="button" id="toolBoldBtn"><strong>B</strong></button>
                     <button class="format-btn" type="button" id="toolItalicBtn"><em>I</em></button>
@@ -257,15 +228,16 @@ document.addEventListener('DOMContentLoaded', () => {
                             <button class="format-btn" type="button" data-align="right">Right</button>
                         </div>
                         <div class="history-controls">
-                            <button class="icon-btn" type="button" id="toolUndoBtn"><span class="undo-icon">↺</span></button>
-                            <button class="icon-btn" type="button" id="toolRedoBtn"><span class="redo-icon">↻</span></button>
+                            <button class="icon-btn" type="button" id="toolUndoBtn"><span class="undo-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg></span></button>
+                            <button class="icon-btn" type="button" id="toolRedoBtn"><span class="redo-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.13-9.36L23 10"/></svg></span></button>
                         </div>
                     </div>
                 </div>
                 <div class="autosave-option">
                     <label class="checkbox-container">
                         <input type="checkbox" id="toolSaveProgress">
-                        <span>Continue where I left off</span>
+                        <span class="custom-checkbox"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+                        <span class="checkbox-label">Continue where I left off</span>
                     </label>
                 </div>
             </div>
@@ -292,11 +264,34 @@ document.addEventListener('DOMContentLoaded', () => {
     const pasteBtn = document.createElement('button');
     pasteBtn.type = 'button';
     pasteBtn.id = 'pasteInput';
-    pasteBtn.title = 'Paste input';
-    pasteBtn.setAttribute('aria-label', 'Paste input');
+    pasteBtn.title = 'Paste from clipboard';
+    pasteBtn.setAttribute('aria-label', 'Paste from clipboard');
+    // Paste icon: clipboard with document being inserted
+    pasteBtn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><line x1="12" y1="11" x2="12" y2="17"/><line x1="9" y1="14" x2="15" y2="14"/></svg>`;
     const inputActions = input.closest('.tool-box')?.querySelector('.tool-actions');
     if (inputActions && !document.getElementById('pasteInput')) {
         inputActions.insertBefore(pasteBtn, inputActions.firstChild);
+    }
+
+    // Clear icon: circle with X
+    if (clearBtn) {
+        clearBtn.title = 'Clear input text';
+        clearBtn.setAttribute('aria-label', 'Clear input text');
+        clearBtn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>`;
+    }
+
+    // Copy icon: two overlapping documents
+    if (copyBtn) {
+        copyBtn.title = 'Copy to clipboard';
+        copyBtn.setAttribute('aria-label', 'Copy to clipboard');
+        copyBtn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>`;
+    }
+
+    // Download icon: arrow pointing into a tray
+    if (downloadBtn) {
+        downloadBtn.title = 'Download as .txt';
+        downloadBtn.setAttribute('aria-label', 'Download as .txt');
+        downloadBtn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v13"/><polyline points="8 12 12 16 16 12"/><path d="M20 21H4"/></svg>`;
     }
 
     const saveCheckbox = document.getElementById('toolSaveProgress');
@@ -467,5 +462,178 @@ document.addEventListener('DOMContentLoaded', () => {
             input.focus();
             showToast('Input cleared!');
         });
+    }
+});
+
+// --- DIRECTION-AWARE SCROLL NAVIGATION ---
+function initScrollButtons() {
+    if (document.getElementById('scrollTopBtn')) return;
+
+    const scrollTopBtn = document.createElement('button');
+    scrollTopBtn.id = 'scrollTopBtn';
+    scrollTopBtn.className = 'scroll-nav-btn scroll-top-btn';
+    scrollTopBtn.setAttribute('type', 'button');
+    scrollTopBtn.setAttribute('aria-label', 'Scroll to Top');
+    scrollTopBtn.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>`;
+    document.body.appendChild(scrollTopBtn);
+
+    const scrollBottomBtn = document.createElement('button');
+    scrollBottomBtn.id = 'scrollBottomBtn';
+    scrollBottomBtn.className = 'scroll-nav-btn scroll-bottom-btn';
+    scrollBottomBtn.setAttribute('type', 'button');
+    scrollBottomBtn.setAttribute('aria-label', 'Scroll to Bottom');
+    scrollBottomBtn.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>`;
+    document.body.appendChild(scrollBottomBtn);
+
+    function hideBothArrows() {
+        scrollTopBtn.classList.remove('visible');
+        scrollBottomBtn.classList.remove('visible');
+    }
+
+    scrollTopBtn.addEventListener('click', function () {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    scrollBottomBtn.addEventListener('click', function () {
+        window.scrollTo({ top: document.documentElement.scrollHeight, behavior: 'smooth' });
+    });
+
+    let lastScrollY = window.scrollY;
+
+    function updateScrollNav() {
+        const currentScrollY = window.scrollY;
+        const pageHeight = document.documentElement.scrollHeight;
+        const viewHeight = window.innerHeight;
+        const atTop = currentScrollY <= 2;
+        const atBottom = !atTop && (currentScrollY + viewHeight >= pageHeight - 2);
+
+        if (atTop || atBottom) {
+            hideBothArrows();
+        } else {
+            const isScrollingDown = currentScrollY > lastScrollY;
+            const isScrollingUp = currentScrollY < lastScrollY;
+
+            if (isScrollingDown) {
+                scrollBottomBtn.classList.add('visible');
+                scrollTopBtn.classList.remove('visible');
+            } else if (isScrollingUp) {
+                scrollTopBtn.classList.add('visible');
+                scrollBottomBtn.classList.remove('visible');
+            }
+        }
+
+        lastScrollY = currentScrollY;
+    }
+
+    window.addEventListener('scroll', updateScrollNav, { passive: true });
+    window.addEventListener('resize', updateScrollNav, { passive: true });
+    updateScrollNav();
+}
+
+document.addEventListener('DOMContentLoaded', initScrollButtons);
+if (document.readyState === 'interactive' || document.readyState === 'complete') {
+    initScrollButtons();
+}
+
+// --- RIGHT-SIDE CASE-TOOL MENU PANEL ---
+const TOOL_ITEMS_HTML = `
+    <a href="/sentence-case/">Sentence case</a>
+    <a href="/lower-case/">lower case</a>
+    <a href="/upper-case/">UPPER CASE</a>
+    <a href="/capitalized-case/">Capitalized Case</a>
+    <a href="/title-case/">Title Case</a>
+    <a href="/snake-case/">Snake_Case</a>
+    <a href="/kebab-case/">Kebab-Case</a>
+    <a href="/train-case/">Train-Case</a>
+    <a href="/dot-case/">dot.case</a>
+    <a href="/path-case/">path/case</a>
+    <a href="/space-case/">space case</a>
+    <a href="/flatcase/">flatcase</a>
+    <a href="/upperflatcase/">UPPERFLATCASE</a>
+    <a href="/studlycaps-random-case/">StudlyCaps (Random Case)</a>
+    <a href="/camel-case/">Camel Case</a>
+    <a href="/pascal-case/">Pascal Case</a>
+    <a href="/screaming-snake-case/">SCREAMING_SNAKE_CASE</a>
+    <a href="/inverse-case/">iNVERSE cASE</a>
+    <a href="/alternating-case/">aLtErNaTiNg cAsE</a>
+    <a href="/reverse-case/">Reverse Case</a>
+    <a href="/remove-emoji/">Remove Emoji</a>
+    <a href="/remove-html/">Remove HTML</a>
+`;
+
+function createSideMenuPanel() {
+    if (document.getElementById('sideMenuPanel')) return;
+
+    const overlay = document.createElement('div');
+    overlay.id = 'sideMenuOverlay';
+    overlay.className = 'side-menu-overlay';
+    overlay.onclick = closeSideMenu;
+    document.body.appendChild(overlay);
+
+    const panel = document.createElement('div');
+    panel.id = 'sideMenuPanel';
+    panel.className = 'side-menu-panel';
+    panel.setAttribute('aria-hidden', 'true');
+    panel.innerHTML = `
+        <div class="side-menu-header">
+            <h3>Convert Case Tools</h3>
+            <button type="button" class="side-menu-close" id="sideMenuCloseBtn" onclick="closeSideMenu()" aria-label="Close Menu">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+        </div>
+        <div class="side-menu-grid">
+            ${TOOL_ITEMS_HTML}
+        </div>
+    `;
+    document.body.appendChild(panel);
+}
+
+function openSideMenu() {
+    createSideMenuPanel();
+    const panel = document.getElementById('sideMenuPanel');
+    const overlay = document.getElementById('sideMenuOverlay');
+    if (panel) {
+        panel.classList.add('open');
+        panel.setAttribute('aria-hidden', 'false');
+    }
+    if (overlay) {
+        overlay.classList.add('open');
+    }
+}
+
+function closeSideMenu() {
+    const panel = document.getElementById('sideMenuPanel');
+    const overlay = document.getElementById('sideMenuOverlay');
+    if (panel) {
+        panel.classList.remove('open');
+        panel.setAttribute('aria-hidden', 'true');
+    }
+    if (overlay) {
+        overlay.classList.remove('open');
+    }
+}
+
+function toggleSideMenu() {
+    const panel = document.getElementById('sideMenuPanel');
+    if (panel && panel.classList.contains('open')) {
+        closeSideMenu();
+    } else {
+        openSideMenu();
+    }
+}
+
+document.addEventListener('click', function (e) {
+    const panel = document.getElementById('sideMenuPanel');
+    const menuBtn = document.getElementById('menuBtn');
+    if (!panel || !panel.classList.contains('open')) return;
+
+    if (!panel.contains(e.target) && (!menuBtn || !menuBtn.contains(e.target))) {
+        closeSideMenu();
+    }
+});
+
+window.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') {
+        closeSideMenu();
     }
 });
