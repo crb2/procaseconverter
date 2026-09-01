@@ -439,19 +439,109 @@ body.dark-mode .checkbox-label {
     transition: background-color 0.25s, border-color 0.25s;
 }
 
-#textInput::-webkit-scrollbar {
-    width: 15px;
+/* --- Modern Custom Scrollbar & Resize Handle --- */
+#textInput,
+.tool-box textarea,
+textarea {
+    scrollbar-width: thin;
+    scrollbar-color: #3e3e3e #181818;
 }
 
-#textInput::-webkit-scrollbar-thumb {
-    background-color: var(--btn-border);
-    border-radius: 10px;
-    border: 3px solid var(--bg-card);
-    cursor: pointer !important;
+body:not(.dark-mode) #textInput,
+body:not(.dark-mode) .tool-box textarea,
+body:not(.dark-mode) textarea {
+    scrollbar-color: #a8b0b8 #eaedf0;
 }
 
-#textInput::-webkit-scrollbar-thumb:hover {
-    background-color: var(--text-muted);
+#textInput::-webkit-scrollbar,
+.tool-box textarea::-webkit-scrollbar,
+textarea::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+}
+
+#textInput::-webkit-scrollbar-track,
+.tool-box textarea::-webkit-scrollbar-track,
+textarea::-webkit-scrollbar-track {
+    background: #181818;
+    border-radius: 8px;
+}
+
+body:not(.dark-mode) #textInput::-webkit-scrollbar-track,
+body:not(.dark-mode) .tool-box textarea::-webkit-scrollbar-track,
+body:not(.dark-mode) textarea::-webkit-scrollbar-track {
+    background: #eaedf0;
+    border-radius: 8px;
+}
+
+#textInput::-webkit-scrollbar-thumb,
+.tool-box textarea::-webkit-scrollbar-thumb,
+textarea::-webkit-scrollbar-thumb {
+    background-color: #3e3e3e;
+    border-radius: 8px;
+    border: 2.5px solid #181818;
+}
+
+#textInput::-webkit-scrollbar-thumb:hover,
+.tool-box textarea::-webkit-scrollbar-thumb:hover,
+textarea::-webkit-scrollbar-thumb:hover {
+    background-color: #555555;
+}
+
+body:not(.dark-mode) #textInput::-webkit-scrollbar-thumb,
+body:not(.dark-mode) .tool-box textarea::-webkit-scrollbar-thumb,
+body:not(.dark-mode) textarea::-webkit-scrollbar-thumb {
+    background-color: #a8b0b8;
+    border: 2.5px solid #eaedf0;
+}
+
+body:not(.dark-mode) #textInput::-webkit-scrollbar-thumb:hover,
+body:not(.dark-mode) .tool-box textarea::-webkit-scrollbar-thumb:hover,
+body:not(.dark-mode) textarea::-webkit-scrollbar-thumb:hover {
+    background-color: #8b95a0;
+}
+
+#textInput::-webkit-scrollbar-corner,
+.tool-box textarea::-webkit-scrollbar-corner,
+textarea::-webkit-scrollbar-corner {
+    background: transparent;
+}
+
+body:not(.dark-mode) #textInput::-webkit-scrollbar-corner,
+body:not(.dark-mode) .tool-box textarea::-webkit-scrollbar-corner,
+body:not(.dark-mode) textarea::-webkit-scrollbar-corner {
+    background: transparent;
+}
+
+/* Custom Modern Vertical Resize Handle - Transparent Background with Only 2 Diagonal Lines */
+#textInput::-webkit-resizer,
+.tool-box textarea::-webkit-resizer,
+textarea::-webkit-resizer {
+    background-color: transparent;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' width='16' height='16' fill='none'%3E%3Cline x1='6' y1='14' x2='14' y2='6' stroke='%23666666' stroke-width='1.5' stroke-linecap='round'/%3E%3Cline x1='10' y1='14' x2='14' y2='10' stroke='%23666666' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: bottom 2px right 2px;
+}
+
+#textInput::-webkit-resizer:hover,
+.tool-box textarea::-webkit-resizer:hover,
+textarea::-webkit-resizer:hover {
+    background-color: transparent;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' width='16' height='16' fill='none'%3E%3Cline x1='6' y1='14' x2='14' y2='6' stroke='%23888888' stroke-width='1.5' stroke-linecap='round'/%3E%3Cline x1='10' y1='14' x2='14' y2='10' stroke='%23888888' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");
+}
+
+body:not(.dark-mode) #textInput::-webkit-resizer,
+body:not(.dark-mode) .tool-box textarea::-webkit-resizer,
+body:not(.dark-mode) textarea::-webkit-resizer {
+    background-color: transparent;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' width='16' height='16' fill='none'%3E%3Cline x1='6' y1='14' x2='14' y2='6' stroke='%23888888' stroke-width='1.5' stroke-linecap='round'/%3E%3Cline x1='10' y1='14' x2='14' y2='10' stroke='%23888888' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");
+}
+
+body:not(.dark-mode) #textInput::-webkit-resizer:hover,
+body:not(.dark-mode) .tool-box textarea::-webkit-resizer:hover,
+body:not(.dark-mode) textarea::-webkit-resizer:hover {
+    background-color: transparent;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' width='16' height='16' fill='none'%3E%3Cline x1='6' y1='14' x2='14' y2='6' stroke='%23555555' stroke-width='1.5' stroke-linecap='round'/%3E%3Cline x1='10' y1='14' x2='14' y2='10' stroke='%23555555' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");
 }
 
 #textInput:empty:before {

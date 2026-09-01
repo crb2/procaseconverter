@@ -294,6 +294,11 @@ document.addEventListener('DOMContentLoaded', () => {
         downloadBtn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v13"/><polyline points="8 12 12 16 16 12"/><path d="M20 21H4"/></svg>`;
     }
 
+    input.spellcheck = true;
+    input.setAttribute('spellcheck', 'true');
+    input.lang = 'en';
+    input.setAttribute('lang', 'en');
+
     const saveCheckbox = document.getElementById('toolSaveProgress');
     const savedText = localStorage.getItem(`${storageKey}:input`);
     if (saveCheckbox) {

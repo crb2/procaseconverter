@@ -153,6 +153,13 @@ window.addEventListener('load', () => {
     currentFontSize = savedFontSize ? parseInt(savedFontSize) : 16;
     applyFontSize();
     
+    if (textArea) {
+        textArea.spellcheck = true;
+        textArea.setAttribute('spellcheck', 'true');
+        textArea.lang = 'en';
+        textArea.setAttribute('lang', 'en');
+    }
+
     applyTheme(getSavedTheme());
 
     lastHistoryState = textArea.innerHTML;
